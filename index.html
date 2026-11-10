@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Capitalist: Vòng Xoáy Thặng Dư</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;700&display=swap&subset=vietnamese" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- Màn hình bắt đầu -->
+  <section id="screen-start" class="screen active">
+    <div class="start-inner">
+      <div class="crest" id="start-crest"></div>
+      <p class="eyebrow">Kinh tế chính trị Mác – Lênin · Chương 3</p>
+      <h1>The Capitalist</h1>
+      <h2>Vòng Xoáy Thặng Dư</h2>
+      <div class="rule"><span></span><i></i><span></span></div>
+      <p class="quote">“Anh/Chị là một nhà tư bản, sau khi thực hiện hành vi ‘bóc lột’ giai cấp công nhân thì anh/chị sẽ sử dụng giá trị thặng dư đó như thế nào?”</p>
+      <p class="how">Thặng dư <b>m</b> tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
+      <button id="btn-start" class="big">Bắt đầu kinh doanh</button>
+      <p id="legacy-note" class="small"></p>
+    </div>
+  </section>
+
+  <!-- Màn hình chơi -->
+  <section id="screen-play" class="screen">
+    <header id="meters"></header>
+
+    <div id="topbar">
+      <div class="stat big-stat"><span class="lbl">Thặng dư m</span><span id="m-val">0</span></div>
+      <div class="stat"><span class="lbl">Thu nhập</span><span><b id="m-rate">0</b>/s</span></div>
+      <div class="stat"><span class="lbl">Tình huống</span><span><b id="card-count">0</b>/20</span></div>
+      <button id="btn-mute" title="Bật/tắt âm thanh">Âm thanh: Bật</button>
+    </div>
+
+    <div id="scene-wrap"><svg id="scene" viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice"></svg></div>
+
+    <div id="shop"></div>
+
+    <div id="card-timer" title="Thời gian đến tình huống kế tiếp"><div id="card-timer-fill"></div></div>
+    <div id="float-layer"></div>
+  </section>
+
+  <!-- Thẻ tình huống (lớp phủ) -->
+  <div id="card-overlay" class="hidden">
+    <div id="card-area">
+      <div id="card">
+        <div class="stamp left">PHƯƠNG ÁN A</div>
+        <div class="stamp right">PHƯƠNG ÁN B</div>
+        <div class="portrait" id="card-portrait"></div>
+        <div class="who" id="card-who"></div>
+        <div class="said" id="card-text"></div>
+        <div class="hint"><span id="card-hint-l"></span><span id="card-hint-r"></span></div>
+      </div>
+    </div>
+    <div id="card-buttons">
+      <button id="btn-left" class="round red" title="Phương án A (←)">A</button>
+      <div id="card-choice-labels"><div id="lbl-l"></div><div id="lbl-r"></div></div>
+      <button id="btn-right" class="round blue" title="Phương án B (→)">B</button>
+    </div>
+  </div>
+
+  <!-- Giải thích sau khi chọn -->
+  <div id="note-toast" class="hidden"></div>
+
+  <!-- Màn hình kết cục -->
+  <section id="screen-end" class="screen">
+    <div class="end-inner">
+      <div id="end-emoji" class="seal"></div>
+      <p class="eyebrow">Tổng kết lý luận</p>
+      <h2 id="end-title"></h2>
+      <div class="rule"><span></span><i></i><span></span></div>
+      <p id="end-text" class="end-text"></p>
+      <div id="end-stats" class="small"></div>
+      <button id="btn-restart" class="big">Thừa kế &amp; chơi lại</button>
+    </div>
+  </section>
+
+</div>
+<script src="data.js" charset="utf-8"></script>
+<script src="art.js" charset="utf-8"></script>
+<script src="scene.js" charset="utf-8"></script>
+<script src="game.js" charset="utf-8"></script>
+</body>
+</html>
