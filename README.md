@@ -61,10 +61,10 @@ Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh vi�
 | File | Vai trò |
 |---|---|
 | `index.html` | Các màn hình: bắt đầu, chơi, thẻ bài, kết cục |
-| `style.css` | Giao diện kinh dị kiểu Victorian (nhiễu hạt, đèn chập chờn, viền máu) |
-| `audio.js` | Nhạc nền hộp nhạc lạc điệu, tiếng drone, chuông, nhịp tim và hiệu ứng (tổng hợp bằng WebAudio) |
+| `style.css` | Giao diện kiểu Victorian |
 | `game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, lưu game |
 | `data.js` | Thẻ tình huống, nâng cấp, kết cục (theo tài liệu thiết kế) |
 | `art.js` | Biểu tượng và chân dung SVG |
 | `scene.js` | Cảnh nhà xưởng hoạt hình |
+| `factory.js` | Âm thanh nền nhà xưởng: tiếng máy ù, khung dệt, hơi nước, búa (tổng hợp bằng WebAudio) |
 | `t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế gốc |

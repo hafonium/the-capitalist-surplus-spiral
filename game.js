@@ -12,11 +12,9 @@
   };
 
   // ---------- Trạng thái ----------
-  let legacy = 0, bestCards = 0, muted = false;
+  let legacy = 0, bestCards = 0, muted = false, lastSeen = Date.now();
   let S = null; // trạng thái ván hiện tại
   let running = false, cardOpen = false, current = null, deck = [], last = 0;
-  let whisperT = 14, fear = 0;
-  const sfx = Sound.sfx;
 
   function fresh() {
     return { m: 0, total: 0, meters: { cv: 50, v: 50, zr: 50, td: 50 }, levels: {}, cards: 0, cardTimer: FIRST_CARD, t: 0 };
@@ -35,40 +33,26 @@
     store.set({ legacy, bestCards, muted, lastSeen: Date.now(), S: running ? S : null });
   }
 
-  // ---------- Hiệu ứng kinh dị ----------
-  function flash(red) {
-    const f = $("fx-flash");
-    f.className = ""; void f.offsetWidth;
-    f.className = "on" + (red ? " red" : "");
+  // ---------- Âm thanh (WebAudio) ----------
+  let ac = null;
+  function beep(freq, dur = 0.08, type = "square", vol = 0.05, slide = 0) {
+    if (muted) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = type; o.frequency.value = freq;
+      if (slide) o.frequency.linearRampToValueAtTime(freq + slide, ac.currentTime + dur);
+      g.gain.value = vol; g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+      o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + dur);
+    } catch {}
   }
-  let whisperHide = null;
-  function whisper(text) {
-    const w = $("whisper");
-    w.textContent = text;
-    w.classList.add("show");
-    clearTimeout(whisperHide);
-    whisperHide = setTimeout(() => w.classList.remove("show"), 4200);
-    sfx.whisper();
-    if (Math.random() < 0.4) flash(false);
-  }
-  function pickWhisper() {
-    const M = S.meters;
-    let pool = WHISPERS;
-    if (M.v < 30) pool = pool.concat(WHISPERS_LOW_V);
-    if (M.zr < 30) pool = pool.concat(WHISPERS_LOW_ZR);
-    if (M.td > 70) pool = pool.concat(WHISPERS_HIGH_TD);
-    return pool[Math.floor(Math.random() * pool.length)];
-  }
-  function updateFear() {
-    const d = Math.min(...Object.values(S.meters).map(x => Math.min(x, 100 - x)));
-    const f = d <= 12 ? 2 : d <= 25 ? 1 : 0;
-    if (f !== fear) {
-      fear = f;
-      document.body.dataset.fear = f;
-      Sound.setFear(f);
-      if (f === 2) sfx.creak();
-    }
-  }
+  const sfx = {
+    buy: () => { beep(660, .06, "triangle"); setTimeout(() => beep(990, .08, "triangle"), 60); },
+    hammer: () => beep(120, .15, "sawtooth", .09, -60),
+    swipe: () => beep(300, .07, "sawtooth", .03, 200),
+    bad: () => beep(90, .5, "sawtooth", .08, -40),
+    good: () => [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => beep(f, .15, "triangle"), i * 110)),
+  };
 
   // ---------- Giao diện chỉ số ----------
   function buildMeters() {
@@ -89,8 +73,8 @@
       $("mv-" + k).textContent = Math.round(v);
       $("mt-" + k).classList.toggle("danger", v <= 12 || v >= 88);
     }
-    updateFear();
     Scene.render(S.meters.cv, S.meters.v);
+    Factory.setState(S.meters.cv, S.meters.v);
   }
   function refreshTop() {
     $("m-val").textContent = fmt(S.m);
@@ -109,7 +93,7 @@
     el.className = "float"; el.textContent = text; el.style.color = color;
     el.style.left = (20 + Math.random() * 60) + "%"; el.style.top = (35 + Math.random() * 15) + "%";
     $("float-layer").appendChild(el);
-    setTimeout(() => el.remove(), 1500);
+    setTimeout(() => el.remove(), 1400);
   }
 
   // ---------- Hành động ----------
@@ -157,7 +141,6 @@
     $("card-hint-r").textContent = Object.keys(current.right.fx).map(k => METERS[k].short).join(" · ") + " →";
     $("card-overlay").classList.remove("hidden");
     resetCard(true);
-    sfx.creak();
     refreshTop();
   }
 
@@ -180,7 +163,7 @@
     const c = $("card");
     c.classList.remove("drag");
     c.style.transform = `translateX(${side === "left" ? -140 : 140}vw) rotate(${side === "left" ? -35 : 35}deg)`;
-    sfx.swipe(); sfx.hammer();
+    sfx.hammer();
     setTimeout(() => {
       cardOpen = false;
       $("card-overlay").classList.add("hidden");
@@ -188,6 +171,7 @@
       applyFx(opt.fx);
       S.cards++;
       S.cardTimer = CARD_INTERVAL;
+      S.bestCardsLocal = Math.max(S.bestCardsLocal || 0, S.cards);
       showNote(opt.note);
       refreshMeters(); refreshTop();
       const hit = Object.values(S.meters).some(v => v <= 0 || v >= 100);
@@ -245,7 +229,7 @@
   function tick(now) {
     requestAnimationFrame(tick);
     if (!running) { last = now; return; }
-    const dt = Math.min(0.25, (now - last) / 1000);
+    let dt = Math.min(0.25, (now - last) / 1000);
     last = now;
     if (cardOpen) return;
 
@@ -253,15 +237,12 @@
     const g = rate() * dt;
     S.m += g; S.total += g;
 
-    // Hao mòn theo thời gian: buộc người chơi phải chi thặng dư
+    // Sức hao mòn theo thời gian: buộc người chơi phải chi thặng dư
     const M = S.meters;
     M.cv -= 0.16 * dt;
     M.v  -= 0.12 * dt;
     M.zr -= 0.20 * dt;
     M.td -= 0.10 * dt;
-
-    whisperT -= dt * (1 + fear * 0.6);
-    if (whisperT <= 0) { whisper(pickWhisper()); whisperT = 20 + Math.random() * 22; }
 
     S.cardTimer -= dt;
     if (S.cardTimer <= 0) {
@@ -272,6 +253,7 @@
     checkEnd();
   }
 
+  let saveTimer = 0;
   setInterval(() => { if (running) save(); }, 5000);
   window.addEventListener("beforeunload", save);
 
@@ -283,42 +265,40 @@
 
   function startGame(resume) {
     if (!resume) S = fresh();
-    running = true; cardOpen = false; deck = []; whisperT = 14; fear = -1;
+    running = true; cardOpen = false; deck = [];
     $("card-overlay").classList.add("hidden");
     show("screen-play");
     buildMeters(); buildShop();
     refreshMeters(); refreshTop();
-    Sound.startMusic();
-    flash(false);
+    sfx.buy();
+    Factory.setMuted(muted);
+    Factory.start();
   }
 
   function endGame(key) {
     running = false; cardOpen = false;
     $("card-overlay").classList.add("hidden");
-    $("whisper").classList.remove("show");
-    document.body.dataset.fear = 0; Sound.setFear(0); Sound.stopMelody();
+    Factory.stop();
     const e = ENDINGS[key];
     const gain = Math.floor(Math.sqrt(S.total / 60)) + (e.good ? 3 : 0);
     legacy += gain;
     bestCards = Math.max(bestCards, S.cards);
     $("end-emoji").innerHTML = e.icon;
     $("end-title").textContent = e.title;
-    $("end-title").dataset.text = e.title;
     $("end-text").textContent = e.text;
     $("end-stats").innerHTML = `Thặng dư tích lũy: <b>${fmt(S.total)} m</b> · Tình huống đã qua: <b>${S.cards}/${WIN_CARDS}</b><br>
       Gia sản thừa kế +${gain} → tổng ${legacy} (thu nhập ×${mult().toFixed(2)})`;
-    flash(!e.good);
     show("screen-end");
     (e.good ? sfx.good : sfx.bad)();
     S = null;
     save();
   }
 
-  const muteLabel = () => ($("btn-mute").textContent = muted ? "Âm thanh: Tắt" : "Âm thanh: Bật");
   $("btn-start").onclick = () => startGame(false);
   $("btn-restart").onclick = () => { updateStart(); startGame(false); };
-  $("btn-mute").onclick = () => { muted = !muted; Sound.setMuted(muted); muteLabel(); save(); };
-  $("start-crest").innerHTML = ICON.eye;
+  const muteLabel = () => ($("btn-mute").textContent = muted ? "Âm thanh: Tắt" : "Âm thanh: Bật");
+  $("btn-mute").onclick = () => { muted = !muted; Factory.setMuted(muted); muteLabel(); save(); };
+  $("start-crest").innerHTML = ICON.gear;
 
   function updateStart() {
     $("legacy-note").textContent = legacy
@@ -330,7 +310,6 @@
   const saved = store.get();
   if (saved) {
     legacy = saved.legacy || 0; bestCards = saved.bestCards || 0; muted = !!saved.muted;
-    Sound.setMuted(muted);
     muteLabel();
     if (saved.S) {
       S = saved.S;
@@ -341,8 +320,8 @@
       if (gain > 0) showNote(`Trong lúc vắng mặt, xưởng đã tạo thêm ${fmt(gain)} m.`);
     }
   }
-  // Trình duyệt chỉ cho phát âm thanh sau thao tác đầu tiên của người chơi
-  const unlock = () => { if (running) Sound.startMusic(); };
+  // Trình duyệt chỉ cho phát âm thanh sau thao tác đầu tiên (khi tải lại giữa ván)
+  const unlock = () => { if (running) Factory.start(); };
   document.addEventListener("pointerdown", unlock, { once: true });
   document.addEventListener("keydown", unlock, { once: true });
 

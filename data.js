@@ -73,30 +73,3 @@ const ENDINGS = {
 };
 
 const WIN_CARDS = 20;
-
-// Lời thì thầm xuất hiện ngẫu nhiên trong lúc chơi
-const WHISPERS = [
-  "Tiếng máy rít lên… như tiếng ai đang khóc.",
-  "Mỗi đồng thặng dư đều mang theo hơi thở của một người thợ.",
-  "Họ tạo ra giá trị. Bạn giữ lấy nó.",
-  "Cánh cổng xưởng khẽ kẽo kẹt… không có gió.",
-  "Bạn nghe tiếng đếm tiền dưới tầng hầm. Xưởng này không có tầng hầm.",
-  "Những cái bóng trên tường cử động chậm hơn bạn một nhịp.",
-  "Sổ lương ghi tên những người không còn đến ca sáng.",
-  "Máy vẫn chạy. Không ai đứng cạnh nó.",
-  "Ngân hàng không bao giờ ngủ. Địa chủ cũng vậy.",
-  "Thời gian lao động thặng dư… không bao giờ được trả công.",
-];
-const WHISPERS_LOW_V = [
-  "Có tiếng búa gõ vào cổng xưởng… từ phía bên ngoài.",
-  "Họ đang thì thầm tên bạn trong khu nhà tập thể.",
-  "Một lá cờ đỏ vừa được may xong trong bóng tối.",
-];
-const WHISPERS_LOW_ZR = [
-  "Một lá thư đóng dấu sáp đen nằm trên bàn làm việc.",
-  "Có người của ngân hàng đứng dưới đèn đường. Đã ba đêm liền.",
-];
-const WHISPERS_HIGH_TD = [
-  "Bữa tiệc chưa tàn. Nhưng kế toán trưởng đã biến mất.",
-  "Rượu vang hôm nay có vị sắt gỉ.",
-];
