@@ -6,10 +6,15 @@
 <title>The Capitalist: Vòng Xoáy Thặng Dư</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;700&display=swap&subset=vietnamese" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;700&display=swap&subset=vietnamese" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-fear="0">
+<div id="fx-flash"></div>
+<div id="fx-vig"></div>
+<div id="fx-grain"></div>
+<div id="whisper"></div>
+
 <div id="app">
 
   <!-- Màn hình bắt đầu -->
@@ -17,12 +22,13 @@
     <div class="start-inner">
       <div class="crest" id="start-crest"></div>
       <p class="eyebrow">Kinh tế chính trị Mác – Lênin · Chương 3</p>
-      <h1>The Capitalist</h1>
+      <h1 data-text="The Capitalist">The Capitalist</h1>
       <h2>Vòng Xoáy Thặng Dư</h2>
       <div class="rule"><span></span><i></i><span></span></div>
       <p class="quote">“Anh/Chị là một nhà tư bản, sau khi thực hiện hành vi ‘bóc lột’ giai cấp công nhân thì anh/chị sẽ sử dụng giá trị thặng dư đó như thế nào?”</p>
-      <p class="how">Thặng dư <b>m</b> tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
-      <button id="btn-start" class="big">Bắt đầu kinh doanh</button>
+      <p class="warn">Xưởng đang thức giấc. Chúng nhớ từng đồng bạn đã lấy.</p>
+      <p class="how">Thặng dư <b>m</b> tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng. Nên đeo tai nghe.</p>
+      <button id="btn-start" class="big">Bước vào xưởng</button>
       <p id="legacy-note" class="small"></p>
     </div>
   </section>
@@ -77,13 +83,14 @@
       <div class="rule"><span></span><i></i><span></span></div>
       <p id="end-text" class="end-text"></p>
       <div id="end-stats" class="small"></div>
-      <button id="btn-restart" class="big">Thừa kế &amp; chơi lại</button>
+      <button id="btn-restart" class="big">Thừa kế &amp; quay lại xưởng</button>
     </div>
   </section>
 
 </div>
 <script src="data.js" charset="utf-8"></script>
 <script src="art.js" charset="utf-8"></script>
+<script src="audio.js" charset="utf-8"></script>
 <script src="scene.js" charset="utf-8"></script>
 <script src="game.js" charset="utf-8"></script>
 </body>

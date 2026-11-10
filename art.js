@@ -15,6 +15,8 @@ const ICON = {
   down: svgIcon(`<path d="M3 4h2.400v13.600H21V20H3z"/><path d="M7 8l4 4 3-3 5 5.500" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/>`),
 };
 
+ICON.eye = svgIcon(`<path d="M1 12s4.200-7.500 11-7.500S23 12 23 12s-4.200 7.500-11 7.500S1 12 1 12z"/><circle cx="12" cy="12" r="5" fill="#000"/><circle cx="12" cy="12" r="2.200" fill="currentColor"/><circle cx="13.300" cy="10.700" r=".9" fill="#fff"/>`);
+
 // Gắn biểu tượng vào dữ liệu
 METERS.cv.icon = ICON.gear;  METERS.cv.short = "c/v";
 METERS.v.icon  = ICON.fist;  METERS.v.short  = "v";
@@ -53,7 +55,11 @@ function portrait(id) {
   s += `<ellipse cx="60" cy="42" rx="19" ry="23" fill="${SKIN}"/>`;
   if (P.child) s += `<circle cx="96" cy="76" r="9" fill="${SKIN}"/><path d="M84 100c0-12 6-16 12-16s12 4 12 16z" fill="#8a7a58"/>`;
   // mặt
-  s += `<circle cx="52" cy="42" r="1.800" fill="${INK}"/><circle cx="68" cy="42" r="1.800" fill="${INK}"/>`;
+  // hốc mắt trũng sâu, con ngươi nhỏ
+  s += `<ellipse cx="52" cy="42" rx="4" ry="4.600" fill="#3a2c22" stroke="none"/><ellipse cx="68" cy="42" rx="4" ry="4.600" fill="#3a2c22" stroke="none"/>`;
+  s += `<ellipse cx="52" cy="42" rx="2.600" ry="3" fill="#050403" stroke="none"/><ellipse cx="68" cy="42" rx="2.600" ry="3" fill="#050403" stroke="none"/>`;
+  s += `<circle cx="52.600" cy="41.600" r=".8" fill="#f2ead2" stroke="none"/><circle cx="68.600" cy="41.600" r=".8" fill="#f2ead2" stroke="none"/>`;
+  s += `<path d="M47 50q3 2 6 1M67 51q3 1 6-1" fill="none" stroke-width="1" opacity=".6"/>`;
   s += `<path d="M60 44v8" fill="none"/><path d="M54 57q6 3 12 0" fill="none"/>`;
   s += `<path d="M47 37q5-3 9 0M64 37q5-3 9 0" fill="none"/>`;
   if (P.stache) s += `<path d="M50 53q10-6 20 0q-10 2-20 0z" fill="${INK}"/>`;
