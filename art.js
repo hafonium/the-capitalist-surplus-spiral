@@ -18,7 +18,7 @@ const ICON = {
 // Gắn biểu tượng vào dữ liệu
 METERS.cv.icon = ICON.gear;  METERS.cv.short = "c/v";
 METERS.v.icon  = ICON.fist;  METERS.v.short  = "v";
-METERS.zr.icon = ICON.scales; METERS.zr.short = "z+R";
+METERS.zr.icon = ICON.scales; METERS.zr.short = "z+r";
 METERS.td.icon = ICON.hat;   METERS.td.short = "m_td";
 
 const END_ICON = {
@@ -38,6 +38,13 @@ function portrait(id) {
     5: { bg: "#a9b3a4", coat: "#24262b", hat: "bald", glasses: true, prop: "paper" },
     6: { bg: "#c9a9b8", coat: "#5d2a63", hat: "lady", fur: true },
     7: { bg: "#c8a58b", coat: "#4a5560", hat: "flat", scarf: true },
+    8: { bg: "#9fb0b8", coat: "#3b4a52", hat: "cap", glasses: true, prop: "paper" },
+    9: { bg: "#c28f80", coat: "#5a3a2a", hat: "flat", scarf: true, stache: true },
+    10: { bg: "#c7b48a", coat: "#2f4a3a", hat: "top", prop: "scroll" },
+    11: { bg: "#b8b0a0", coat: "#222226", hat: "top", glasses: true, prop: "paper" },
+    12: { bg: "#b3a88f", coat: "#3c3a36", hat: "bald", glasses: true, stache: true, prop: "paper" },
+    13: { bg: "#a6a0b4", coat: "#2a2a3a", hat: "top", stache: true, prop: "watch" },
+    14: { bg: "#b7b39a", coat: "#2d3a2d", hat: "top", glasses: true, prop: "scroll" },
   }[id] || { bg: "#c9b27c", coat: "#333", hat: "none" };
 
   let s = `<svg viewBox="0 0 120 100" class="bust" aria-hidden="true">

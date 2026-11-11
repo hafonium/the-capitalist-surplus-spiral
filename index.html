@@ -21,8 +21,14 @@
       <h2>Vòng Xoáy Thặng Dư</h2>
       <div class="rule"><span></span><i></i><span></span></div>
       <p class="quote">“Anh/Chị là một nhà tư bản, sau khi thực hiện hành vi ‘bóc lột’ giai cấp công nhân thì anh/chị sẽ sử dụng giá trị thặng dư đó như thế nào?”</p>
-      <p class="how">Thặng dư <b>m</b> tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
+      <p class="formula-line">T – H <small>(TLSX, SLĐ)</small> … SX … H' – T' <small>· T' = T + ΔT</small></p>
+      <p class="how">Thặng dư <b>m</b> do lao động làm thuê tạo ra tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
       <button id="btn-start" class="big">Bắt đầu kinh doanh</button>
+      <div class="sub-actions">
+        <button class="ghost" data-open="codex">Sổ tay học thuật <span class="cnt" data-cnt="codex"></span></button>
+        <button class="ghost" data-open="endings">Bộ sưu tập kết cục <span class="cnt" data-cnt="endings"></span></button>
+        <button class="ghost" data-toggle="music">Nhạc: Bật</button>
+      </div>
       <p id="legacy-note" class="small"></p>
     </div>
   </section>
@@ -33,16 +39,32 @@
 
     <div id="topbar">
       <div class="stat big-stat"><span class="lbl">Thặng dư m</span><span id="m-val">0</span></div>
-      <div class="stat"><span class="lbl">Thu nhập</span><span><b id="m-rate">0</b>/s</span></div>
-      <div class="stat"><span class="lbl">Tình huống</span><span><b id="card-count">0</b>/20</span></div>
-      <button id="btn-mute" title="Bật/tắt âm thanh">Âm thanh: Bật</button>
+      <div class="stat" id="st-rate"><span class="lbl">Thu nhập</span><span><b id="m-rate">0</b>/s</span></div>
+      <div class="stat" id="st-ex" title="Tỷ suất giá trị thặng dư m' = m/v = thời gian lao động thặng dư / thời gian lao động cần thiết. Tiền công (v) càng cao thì phần thặng dư càng mỏng, thu nhập càng thấp."><span class="lbl">Tỷ suất m'</span><span><b id="m-ex">100%</b> <small id="m-day-t"></small></span><span id="m-day"></span></div>
+      <div class="stat goal" id="st-goal"><span class="lbl" id="gen-lbl"></span><span id="goal-txt"></span></div>
+      <div class="stat"><span class="lbl">Tình huống</span><span><b id="card-count">0</b>/20 <small id="year"></small></span></div>
+      <div id="speed" title="Tốc độ (phím Space / 1 / 2 / 3)">
+        <button data-s="0" title="Tạm dừng (Space)">❚❚</button><button data-s="1">1×</button><button data-s="2">2×</button><button data-s="3">3×</button>
+      </div>
+      <div class="tools">
+        <button class="tool" data-open="codex">Sổ tay <span class="cnt" data-cnt="codex"></span></button>
+        <button class="tool" data-open="endings">Kết cục <span class="cnt" data-cnt="endings"></span></button>
+        <button class="tool" data-toggle="music" title="Bật/tắt nhạc nền (phím M)">Nhạc: Bật</button>
+        <button class="tool" data-toggle="sfx" title="Bật/tắt tiếng nhà xưởng và hiệu ứng">Âm thanh: Bật</button>
+      </div>
     </div>
 
-    <div id="scene-wrap"><svg id="scene" viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice"></svg></div>
+    <div id="scene-wrap"><svg id="scene" viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice"></svg>
+      <div id="pause-banner" class="hidden">TẠM DỪNG<small>Bấm 1×, 2×, 3× hoặc Space để tiếp tục</small></div>
+    </div>
 
     <div id="shop"></div>
 
-    <div id="card-timer" title="Thời gian đến tình huống kế tiếp"><div id="card-timer-fill"></div></div>
+    <div id="timer-row">
+      <span class="lbl">Tình huống kế tiếp</span>
+      <div id="card-timer" title="Thời gian đến tình huống kế tiếp"><div id="card-timer-fill"></div></div>
+      <button id="btn-next" title="Phím N">Gọi ngay ▸</button>
+    </div>
     <div id="float-layer"></div>
   </section>
 
@@ -53,6 +75,7 @@
         <div class="stamp left">PHƯƠNG ÁN A</div>
         <div class="stamp right">PHƯƠNG ÁN B</div>
         <div class="portrait" id="card-portrait"></div>
+        <div class="card-tag" id="card-tag"></div>
         <div class="who" id="card-who"></div>
         <div class="said" id="card-text"></div>
         <div class="hint"><span id="card-hint-l"></span><span id="card-hint-r"></span></div>
@@ -60,7 +83,7 @@
     </div>
     <div id="card-buttons">
       <button id="btn-left" class="round red" title="Phương án A (←)">A</button>
-      <div id="card-choice-labels"><div id="lbl-l"></div><div id="lbl-r"></div></div>
+      <div id="card-choice-labels"><div id="lbl-l" class="opt"></div><div id="lbl-r" class="opt"></div></div>
       <button id="btn-right" class="round blue" title="Phương án B (→)">B</button>
     </div>
   </div>
@@ -68,16 +91,32 @@
   <!-- Giải thích sau khi chọn -->
   <div id="note-toast" class="hidden"></div>
 
+  <!-- Sổ tay / Bộ sưu tập (cửa sổ) -->
+  <div id="modal" class="hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button id="modal-x" title="Đóng (Esc)">×</button>
+      <p class="eyebrow" id="modal-eyebrow"></p>
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
   <!-- Màn hình kết cục -->
   <section id="screen-end" class="screen">
     <div class="end-inner">
       <div id="end-emoji" class="seal"></div>
-      <p class="eyebrow">Tổng kết lý luận</p>
+      <p class="eyebrow"><span id="end-gen"></span> · Tổng kết lý luận</p>
       <h2 id="end-title"></h2>
       <div class="rule"><span></span><i></i><span></span></div>
       <p id="end-text" class="end-text"></p>
+      <p id="end-why" class="end-why"></p>
+      <div id="end-final"></div>
       <div id="end-stats" class="small"></div>
       <button id="btn-restart" class="big">Thừa kế &amp; chơi lại</button>
+      <div class="sub-actions">
+        <button class="ghost" data-open="codex">Sổ tay học thuật <span class="cnt" data-cnt="codex"></span></button>
+        <button class="ghost" data-open="endings">Bộ sưu tập kết cục <span class="cnt" data-cnt="endings"></span></button>
+      </div>
     </div>
   </section>
 
@@ -86,6 +125,7 @@
 <script src="art.js" charset="utf-8"></script>
 <script src="scene.js" charset="utf-8"></script>
 <script src="factory.js" charset="utf-8"></script>
+<script src="music.js" charset="utf-8"></script>
 <script src="game.js" charset="utf-8"></script>
 </body>
 </html>
