@@ -6,7 +6,7 @@ Trò chơi web (idle + thẻ bài quẹt) cho học phần **Kinh tế chính tr
 
 ## Nội dung học thuật
 
-Toàn bộ thẻ tình huống, ô *Học thuật*, Sổ tay và kết cục bám theo bài giảng **Chương 3: Giá trị thặng dư trong nền kinh tế thị trường** (file `GTTD nền kinh tế thị trường gửi SV.pdf`): công thức T – H – T', hàng hóa sức lao động, tư bản bất biến/khả biến, m' = m/v, GTTD tuyệt đối/tương đối/siêu ngạch, tích lũy, tích tụ và tập trung, lợi nhuận, lợi tức z, địa tô r. Trích dẫn ghi theo *C. Mác, Tư bản, tập I* (tài liệu tham khảo [4], [5] của bài giảng). Sổ tay có thêm mục **Tóm tắt bài giảng Chương 3** luôn mở.
+Toàn bộ thẻ tình huống, ô *Học thuật*, Sổ tay và kết cục bám theo bài giảng **Chương 3: Giá trị thặng dư trong nền kinh tế thị trường** của học phần (slide bài giảng không kèm trong repo): công thức T – H – T', hàng hóa sức lao động, tư bản bất biến/khả biến, m' = m/v, GTTD tuyệt đối/tương đối/siêu ngạch, tích lũy, tích tụ và tập trung, lợi nhuận, lợi tức z, địa tô r. Trích dẫn ghi theo *C. Mác, Tư bản, tập I* (tài liệu tham khảo [4], [5] của bài giảng). Sổ tay có thêm mục **Tóm tắt bài giảng Chương 3** luôn mở.
 
 ## Cách chạy
 
@@ -43,10 +43,11 @@ Cả bốn chỉ số **tự giảm dần theo thời gian**. Hãy dùng m để
 Mỗi nâng cấp có ô **Giá** (vàng; chuyển đỏ và ghi số còn thiếu khi chưa đủ m) và ô **Cấp** riêng. Giá tăng dần theo mỗi cấp.
 
 ### 3. Thẻ tình huống
-Khoảng 12 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một trong 13 nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một tình huống. Thời gian dừng lại cho đến khi bạn chọn.
+Khoảng 12 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một trong 13 thẻ tình huống. Thời gian dừng lại cho đến khi bạn chọn.
 
 - **Kéo thẻ sang trái** hoặc bấm nút **A** / phím **←** (hoặc `A`) → Phương án A
 - **Kéo thẻ sang phải** hoặc bấm nút **B** / phím **→** (hoặc `D`) → Phương án B
+- Bấm thẳng vào ô nhãn phương án bên dưới thẻ cũng chọn được.
 
 Dưới thẻ, mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Khi kéo thẻ hoặc rê chuột vào phương án, con số hiện ngay trên đầu từng thanh chỉ số. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
 
@@ -65,7 +66,7 @@ Có **9 kết cục**. Mỗi chỉ số chạm **0 hoặc 100** đều kết th�
 - **c/v ≤ 0:** Phá sản trước sức ép cạnh tranh
 - **z+r ≤ 0:** Bị ngân hàng và địa chủ tịch biên
 - **m_td ≥ 100:** Tha hóa vì trụy lạc
-- Các cực còn lại (c/v ≥ 100, v ≥ 100, z+r ≥ 100, m_td ≤ 0) cũng đều dẫn đến phá sản theo những cách khác nhau.
+- Các cực còn lại cũng có kết cục riêng: **c/v ≥ 100** khủng hoảng sản xuất thừa, **v ≥ 100** nhà từ thiện ảo tưởng, **z+r ≥ 100** lệ thuộc tín dụng, **m_td ≤ 0** mất uy tín xã hội.
 
 Vượt qua **20 tình huống** mà không chạm ngưỡng nào để đạt kết cục **Đế chế tư bản độc quyền** (có nền riêng).
 
@@ -90,9 +91,9 @@ Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh vi�
 | `index.html` | Các màn hình: bắt đầu, chơi, thẻ bài, kết cục |
 | `style.css` | Giao diện kiểu Victorian |
 | `game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, tốc độ, sổ tay, bộ sưu tập, lưu game |
-| `data.js` | Thẻ tình huống, nâng cấp, kết cục (theo tài liệu thiết kế) |
+| `data.js` | Nội dung: thẻ tình huống, thẻ hệ quả, nâng cấp, kết cục, mục tiêu mỗi đời, tóm tắt bài giảng |
 | `art.js` | Biểu tượng và chân dung SVG |
 | `scene.js` | Cảnh nhà xưởng hoạt hình |
 | `factory.js` | Âm thanh nền nhà xưởng: tiếng máy ù, khung dệt, hơi nước, búa (tổng hợp bằng WebAudio) |
 | `music.js` | Nhạc nền valse tổng hợp bằng WebAudio |
-| `t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế gốc |
+| `t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế (đã cập nhật khớp với game) |
