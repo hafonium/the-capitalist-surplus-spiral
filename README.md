@@ -10,7 +10,9 @@ Toàn bộ thẻ tình huống, ô *Học thuật*, Sổ tay và kết cục bá
 
 ## Cách chạy
 
-Không cần cài đặt hay build. Mở file `index.html` bằng trình duyệt (Chrome, Edge, Firefox…).
+Chơi trực tuyến: **https://hafonium.github.io/the-capitalist-surplus-spiral/**
+
+Chạy trên máy: không cần cài đặt hay build. Mở file `index.html` bằng trình duyệt (Chrome, Edge, Firefox…).
 Cần internet ở lần đầu để tải font (Playfair Display, Be Vietnam Pro) hiển thị đúng tiếng Việt.
 
 ## Cách chơi
@@ -119,6 +121,18 @@ Phòng chơi dùng [Supabase](https://supabase.com) làm cơ sở dữ liệu. N
 Khóa công khai được phép để trong mã trình duyệt. **Không** dùng khóa `service_role` / secret. Game không chống gian lận: điểm được tính trên máy người chơi.
 
 ## Cấu trúc
+
+```
+index.html          Trang duy nhất (để ở gốc cho GitHub Pages)
+css/style.css       Giao diện
+js/                 Mã nguồn, nạp theo thứ tự trong index.html
+db/supabase.sql     Cơ sở dữ liệu cho chơi theo phòng
+docs/               Tài liệu thiết kế
+```
+
+Các file `js/` là script thường (không phải ES module) để mở `index.html` trực tiếp vẫn chạy được; chúng dùng chung biến toàn cục nên **thứ tự nạp** trong `index.html` quan trọng: `config` → `data` → `art` → `scene` → `factory` → `music` → `online` → `game`.
+
+Mỗi khi sửa CSS/JS, tăng số phiên bản `?v=` ở các thẻ `<link>`/`<script>` trong `index.html` để trình duyệt tải bản mới thay vì bản cũ trong bộ nhớ đệm.
 
 | File | Vai trò |
 |---|---|
