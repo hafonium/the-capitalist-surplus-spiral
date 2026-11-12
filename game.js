@@ -147,6 +147,7 @@
     $("card-timer-txt").textContent = cardOpen ? "Đang diễn ra" : paused ? `Tạm dừng · còn ${tLeft}s` : `Còn ${tLeft}s`;
     $("timer-row").classList.toggle("soon", !cardOpen && !paused && S.cardTimer <= 3);
     $("pause-banner").classList.toggle("hidden", !(paused && !cardOpen));
+    document.body.classList.toggle("card-open", cardOpen && running);
   }
 
   function floatText(text, color) {
@@ -263,7 +264,18 @@
     $("note-toast").classList.add("hidden");   // ô học thuật đã lưu trong Sổ tay, không che nhãn phương án
     resetCard(true);
     refreshTop();
+    layoutCard();
   }
+
+  // Thẻ chỉ chiếm phần màn hình phía trên 4 chỉ số, để vẫn thấy chỉ số thay đổi khi kéo thẻ
+  function layoutCard() {
+    const top = $("meters").getBoundingClientRect().top, ov = $("card-overlay");
+    const fits = top >= 480 && innerWidth > 640; // điện thoại / màn hình thấp: thẻ phủ toàn màn hình như cũ
+    document.body.classList.toggle("card-above", fits);
+    ov.style.setProperty("--avail", fits ? top - 8 + "px" : "100vh");
+    ov.style.setProperty("--below", fits ? innerHeight - top + 12 + "px" : "12px");
+  }
+  addEventListener("resize", () => { if (cardOpen) layoutCard(); });
 
   // Khi kéo thẻ: hiện số thay đổi ngay trên từng chỉ số
   function setDots(fx) {
