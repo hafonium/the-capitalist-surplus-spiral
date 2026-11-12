@@ -58,7 +58,7 @@ Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 12 giây một l
 - **Kéo thẻ sang phải** hoặc bấm nút **B** / phím **→** (hoặc `D`) → Phương án B
 - Bấm thẳng vào ô nhãn phương án bên dưới thẻ cũng chọn được.
 
-Dưới thẻ, mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Khi kéo thẻ hoặc rê chuột vào phương án, con số hiện ngay trên đầu từng thanh chỉ số. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
+Mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Trên máy tính, thẻ nằm phía trên 4 chỉ số và hai phương án A/B ở hai bên thẻ, nên 4 chỉ số luôn hiện rõ; khi kéo thẻ hoặc rê chuột vào phương án, con số thay đổi hiện ngay trên đầu từng thanh chỉ số. Trên điện thoại, thẻ phủ toàn màn hình và hai phương án nằm bên dưới thẻ. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
 
 Sau khi chọn, một ô *Học thuật* hiện ở cuối màn hình, giải thích khái niệm kinh tế chính trị đằng sau lựa chọn đó và được lưu vào **Sổ tay học thuật**. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
 
