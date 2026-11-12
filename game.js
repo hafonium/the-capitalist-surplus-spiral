@@ -326,7 +326,7 @@
   let noteT = null;
   function showNote(text, isNew) {
     const n = $("note-toast");
-    n.innerHTML = `<span class="nt-h">Học thuật${isNew ? ' <em>Mới · đã lưu vào Sổ tay</em>' : ""}</span>`;
+    n.innerHTML = `<button class="nt-x" title="Đóng" aria-label="Đóng">×</button><span class="nt-h">Học thuật${isNew ? ' <em>Mới · đã lưu vào Sổ tay</em>' : ""}</span>`;
     n.appendChild(document.createTextNode(text));
     n.classList.remove("hidden");
     if (isNew) sfx.learn();

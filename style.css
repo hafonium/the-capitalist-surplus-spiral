@@ -281,7 +281,10 @@ button.ghost.danger:hover { background: #b3261e; color: #fff; border-color: #ff9
 .cx.fu { border-color: #8f2424aa; }
 
 /* ---------- Ô học thuật ---------- */
-#note-toast { cursor: pointer; }
+#note-toast { cursor: pointer; padding-right: 48px; }
+.nt-x { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; padding: 0;
+  font-size: 1.25rem; line-height: 1; color: var(--brass-hi); background: #0006; border: 1px solid var(--brass); }
+.nt-x:hover { color: #fff; background: #b3261e; border-color: #ff9c94; }
 .nt-h { display: block; text-transform: uppercase; letter-spacing: .16em; font-size: .62rem; color: var(--brass-hi); margin-bottom: 2px; }
 .nt-h em { font-style: normal; letter-spacing: .06em; margin-left: 6px; padding: 0 6px; border-radius: 8px; background: var(--brass-hi); color: var(--coal); text-transform: none; font-weight: 700; }
 

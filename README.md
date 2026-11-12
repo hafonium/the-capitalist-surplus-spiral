@@ -22,7 +22,7 @@ Mọi thành phần nằm trong một khung giấy viền đồng, từ trên xu
 
 1. **Cảnh nhà xưởng**: máy móc và công nhân thay đổi theo c/v và v.
 2. **Thanh Tình huống kế tiếp** (màu cam): đếm ngược tới thẻ tiếp theo ("Còn 6s"), nhấp nháy trong 3 giây cuối; nút **Gọi ngay ▸** gọi thẻ ngay.
-3. **Bảng điều khiển** (nền sáng): Thặng dư (🪙 … m), Thu nhập (m/s), Tỷ suất m', đời thừa kế & mục tiêu, số tình huống, nút tốc độ, Sổ tay, Kết cục, Nhạc, Âm thanh.
+3. **Bảng điều khiển** (nền sáng): Thặng dư (🪙 … m), Thu nhập (m/s), Tỷ suất m', đời thừa kế & mục tiêu, số tình huống, nút tốc độ, Sổ tay, Kết cục, Nhạc, Âm thanh, **Thoát**.
 4. **Bốn chỉ số**: c/v, v, z+r, m_td.
 5. **Cửa hàng nâng cấp**: bốn nâng cấp tương ứng bốn chỉ số.
 
@@ -60,7 +60,7 @@ Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 12 giây một l
 
 Dưới thẻ, mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Khi kéo thẻ hoặc rê chuột vào phương án, con số hiện ngay trên đầu từng thanh chỉ số. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
 
-Sau khi chọn, một ô *Học thuật* giải thích khái niệm kinh tế chính trị đằng sau lựa chọn đó và được lưu vào **Sổ tay học thuật**.
+Sau khi chọn, một ô *Học thuật* hiện ở cuối màn hình, giải thích khái niệm kinh tế chính trị đằng sau lựa chọn đó và được lưu vào **Sổ tay học thuật**. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
 
 ### 3b. Hệ quả về sau (kiểu Reigns)
 Một số lựa chọn có nhãn **⏳ có hệ quả về sau**: 2–4 tình huống sau, một thẻ hệ quả (viền đỏ) sẽ quay lại, ví dụ chây ỳ lợi tức thì thừa phát lại tới, phớt lờ Luật Công xưởng thì thanh tra tới. Có 6 thẻ hệ quả; chúng **thay cho** thẻ thường và vẫn tính vào 20 tình huống, nên ván không dài thêm.
@@ -89,9 +89,10 @@ Vượt qua **20 tình huống** mà không chạm ngưỡng nào để đạt k
 | **Kết cục** | Bộ sưu tập 9 kết cục: đã đạt / chưa đạt kèm điều kiện |
 | **Nhạc** (M) | Bật/tắt nhạc nền (điệu valse; chuyển giọng thứ khi gặp nguy) |
 | **Âm thanh** | Bật/tắt tiếng nhà xưởng và hiệu ứng |
+| **Thoát** | Bỏ ván đang chơi và về màn hình chính (có hỏi xác nhận) |
 
 ### 6. Chơi lại
-Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh viễn (+10% mỗi điểm, tối đa ×2,5). Thắng được +5 trở lên, thua chỉ được +1. Tiến trình được **tự động lưu** trong trình duyệt, và khi bạn quay lại xưởng sẽ tạo thêm một phần thặng dư trong lúc vắng mặt (tối đa 8 giờ).
+Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh viễn (+10% mỗi điểm, tối đa ×2,5). Thắng được +5 trở lên, thua chỉ được +1. Tiến trình được **tự động lưu** trong trình duyệt. Khi mở lại trang, màn hình chính có nút **Tiếp tục ván đang chơi**; ván chơi một mình còn được cộng thêm một phần thặng dư tạo ra trong lúc vắng mặt (tối đa 8 giờ). Bắt đầu ván mới khi còn ván dở thì game hỏi trước khi bỏ ván đó.
 
 ## Chơi theo phòng (kiểu Kahoot)
 
@@ -100,6 +101,8 @@ Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số**
 - Mọi người trong phòng gặp **cùng thứ tự thẻ tình huống** và **cùng mục tiêu**; gia sản thừa kế không được tính, nên ai cũng xuất phát như nhau.
 - Xếp hạng: **thắng** trước, rồi **số tình huống vượt qua**, rồi **tổng thặng dư tích lũy**.
 - Mỗi tên chỉ chơi một lượt trong một phòng. Muốn chơi lại thì vào bằng tên khác.
+- Người chơi bấm **Thoát** giữa chừng thì tên bị xóa khỏi bảng xếp hạng (có thể vào lại bằng tên cũ).
+- Giáo viên bấm **Kết thúc & xóa phòng** để xóa phòng và toàn bộ kết quả của phòng.
 - Có thể gửi link dạng `…/?room=123456` để mở sẵn màn hình nhập tên.
 
 ### Cài đặt máy chủ (một lần, miễn phí)
@@ -109,6 +112,8 @@ Phòng chơi dùng [Supabase](https://supabase.com) làm cơ sở dữ liệu. N
 2. Vào **SQL Editor**, dán toàn bộ nội dung `supabase.sql`, bấm **Run**.
 3. Vào **Project Settings → API**, chép **Project URL** và khóa công khai (**publishable** hoặc **anon**) vào `config.js`.
 4. Commit và đẩy lên GitHub Pages như bình thường.
+
+Đã cài từ trước? Chạy lại toàn bộ `supabase.sql` (an toàn khi chạy nhiều lần) để có quyền xóa phòng và thoát phòng. Muốn dọn dữ liệu thủ công: trong SQL Editor chạy `delete from rooms;` (xóa mọi phòng và kết quả) hoặc `delete from rooms where created_at < now() - interval '1 day';` (chỉ phòng cũ hơn 1 ngày).
 
 Khóa công khai được phép để trong mã trình duyệt. **Không** dùng khóa `service_role` / secret. Game không chống gian lận: điểm được tính trên máy người chơi.
 
