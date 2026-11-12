@@ -768,14 +768,14 @@
       $("host-stats").innerHTML = "Đã bắt đầu, đang tải…";
     } catch (e) {
       b.disabled = false; b.textContent = "Bắt đầu";
-      alert(e.status === 403 ? "Chưa có quyền bắt đầu phòng: hãy chạy lại supabase.sql trong Supabase." : "Không kết nối được máy chủ. Thử lại.");
+      alert(e.status === 403 ? "Chưa có quyền bắt đầu phòng: hãy chạy lại db/supabase.sql trong Supabase." : "Không kết nối được máy chủ. Thử lại.");
     }
   };
 
   $("btn-close-room").onclick = async () => {
     if (!hostCode || !confirm(`Xóa phòng ${hostCode} và toàn bộ kết quả của phòng? Không thể hoàn tác.`)) return;
     try { await Online.deleteRoom(hostCode); }
-    catch { return alert("Không xóa được phòng: không kết nối được máy chủ hoặc chưa cấp quyền xóa (chạy lại supabase.sql)."); }
+    catch { return alert("Không xóa được phòng: không kết nối được máy chủ hoặc chưa cấp quyền xóa (chạy lại db/supabase.sql)."); }
     hostCode = null; stopPoll(); updateStart(); show("screen-start");
   };
 

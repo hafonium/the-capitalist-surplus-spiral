@@ -110,11 +110,11 @@ Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số**
 Phòng chơi dùng [Supabase](https://supabase.com) làm cơ sở dữ liệu. Nếu chưa cấu hình, game vẫn chơi một mình bình thường và ẩn các nút phòng.
 
 1. Tạo tài khoản và một project mới trên Supabase.
-2. Vào **SQL Editor**, dán toàn bộ nội dung `supabase.sql`, bấm **Run**.
-3. Vào **Project Settings → API**, chép **Project URL** và khóa công khai (**publishable** hoặc **anon**) vào `config.js`.
+2. Vào **SQL Editor**, dán toàn bộ nội dung `db/supabase.sql`, bấm **Run**.
+3. Vào **Project Settings → API**, chép **Project URL** và khóa công khai (**publishable** hoặc **anon**) vào `js/config.js`.
 4. Commit và đẩy lên GitHub Pages như bình thường.
 
-Đã cài từ trước? Chạy lại toàn bộ `supabase.sql` (an toàn khi chạy nhiều lần) để có cột `started_at` cho nút **Bắt đầu** và quyền xóa phòng, thoát phòng. Muốn dọn dữ liệu thủ công: trong SQL Editor chạy `delete from rooms;` (xóa mọi phòng và kết quả) hoặc `delete from rooms where created_at < now() - interval '1 day';` (chỉ phòng cũ hơn 1 ngày).
+Đã cài từ trước? Chạy lại toàn bộ `db/supabase.sql` (an toàn khi chạy nhiều lần) để có cột `started_at` cho nút **Bắt đầu** và quyền xóa phòng, thoát phòng. Muốn dọn dữ liệu thủ công: trong SQL Editor chạy `delete from rooms;` (xóa mọi phòng và kết quả) hoặc `delete from rooms where created_at < now() - interval '1 day';` (chỉ phòng cũ hơn 1 ngày).
 
 Khóa công khai được phép để trong mã trình duyệt. **Không** dùng khóa `service_role` / secret. Game không chống gian lận: điểm được tính trên máy người chơi.
 
@@ -123,14 +123,14 @@ Khóa công khai được phép để trong mã trình duyệt. **Không** dùng
 | File | Vai trò |
 |---|---|
 | `index.html` | Các màn hình: bắt đầu, vào phòng, phòng chờ, phòng của giáo viên, chơi, thẻ bài, kết cục |
-| `style.css` | Giao diện kiểu Victorian |
-| `game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, tốc độ, sổ tay, bộ sưu tập, lưu game |
-| `data.js` | Nội dung: thẻ tình huống, thẻ hệ quả, nâng cấp, kết cục, mục tiêu mỗi đời, tóm tắt bài giảng |
-| `art.js` | Biểu tượng và chân dung SVG |
-| `scene.js` | Cảnh nhà xưởng hoạt hình |
-| `factory.js` | Âm thanh nền nhà xưởng: tiếng máy ù, khung dệt, hơi nước, búa (tổng hợp bằng WebAudio) |
-| `music.js` | Nhạc nền valse tổng hợp bằng WebAudio |
-| `online.js` | Chơi theo phòng: gọi Supabase, bảng xếp hạng, bộ sinh số ngẫu nhiên theo hạt giống |
-| `config.js` | Địa chỉ và khóa công khai Supabase (để trống = chỉ chơi một mình) |
-| `supabase.sql` | Tạo bảng `rooms`, `players` và quyền truy cập trên Supabase |
-| `t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế (đã cập nhật khớp với game) |
+| `css/style.css` | Giao diện kiểu Victorian |
+| `js/game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, tốc độ, sổ tay, bộ sưu tập, lưu game |
+| `js/data.js` | Nội dung: thẻ tình huống, thẻ hệ quả, nâng cấp, kết cục, mục tiêu mỗi đời, tóm tắt bài giảng |
+| `js/art.js` | Biểu tượng và chân dung SVG |
+| `js/scene.js` | Cảnh nhà xưởng hoạt hình |
+| `js/factory.js` | Âm thanh nền nhà xưởng: tiếng máy ù, khung dệt, hơi nước, búa (tổng hợp bằng WebAudio) |
+| `js/music.js` | Nhạc nền valse tổng hợp bằng WebAudio |
+| `js/online.js` | Chơi theo phòng: gọi Supabase, bảng xếp hạng, bộ sinh số ngẫu nhiên theo hạt giống |
+| `js/config.js` | Địa chỉ và khóa công khai Supabase (để trống = chỉ chơi một mình) |
+| `db/supabase.sql` | Tạo bảng `rooms`, `players` và quyền truy cập trên Supabase |
+| `docs/t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế (đã cập nhật khớp với game) |
