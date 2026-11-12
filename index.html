@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;700&display=swap&subset=vietnamese" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <div id="app">
@@ -54,13 +54,27 @@
     </div>
   </section>
 
+  <!-- Phòng chờ của người chơi: đợi giáo viên bấm Bắt đầu -->
+  <section id="screen-lobby" class="screen">
+    <div class="start-inner">
+      <p class="eyebrow">Phòng <span id="lobby-pin"></span></p>
+      <h2 class="room-h">Chờ giáo viên bắt đầu<span class="dots"></span></h2>
+      <p class="lobby-me">Bạn đã vào phòng với tên <b id="lobby-name"></b></p>
+      <div class="rule"><span></span><i></i><span></span></div>
+      <p class="host-count"><b id="lobby-n">1</b> người trong phòng</p>
+      <div id="lobby-names" class="names"></div>
+      <div class="sub-actions"><button class="ghost danger" id="btn-leave">Rời phòng</button></div>
+    </div>
+  </section>
+
   <!-- Giáo viên: mã PIN + bảng xếp hạng trực tiếp -->
   <section id="screen-host" class="screen">
     <div class="host-inner">
       <p class="eyebrow">Mã PIN của phòng</p>
       <div id="host-pin" class="pin"></div>
       <p class="host-how">Vào <b id="host-url"></b>, chọn <b>Vào phòng bằng mã PIN</b> rồi nhập mã trên.</p>
-      <p class="host-count"><b id="host-n">0</b> người chơi · <span id="host-playing">0</span> đang chơi · <span id="host-done">0</span> đã xong</p>
+      <p class="host-count" id="host-stats"></p>
+      <button id="btn-room-start" class="big alt">Bắt đầu</button>
       <div id="host-board"></div>
       <div class="sub-actions">
         <button class="ghost" data-home>← Màn hình chính</button>
@@ -96,7 +110,7 @@
         <button class="tool" data-open="endings">Kết cục <span class="cnt" data-cnt="endings"></span></button>
         <button class="tool" data-toggle="music" title="Bật/tắt nhạc nền (phím M)">Nhạc: Bật</button>
         <button class="tool" data-toggle="sfx" title="Bật/tắt tiếng nhà xưởng và hiệu ứng">Âm thanh: Bật</button>
-        <button class="tool quit" id="btn-quit" title="Bỏ ván này và về màn hình chính">Thoát</button>
+        <button class="tool quit" id="btn-quit" title="Bỏ ván này và về màn hình chính (Esc)">Thoát</button>
       </div>
     </div>
 
@@ -165,13 +179,13 @@
   </section>
 
 </div>
-<script src="config.js?v=3" charset="utf-8"></script>
-<script src="data.js?v=3" charset="utf-8"></script>
-<script src="art.js?v=3" charset="utf-8"></script>
-<script src="scene.js?v=3" charset="utf-8"></script>
-<script src="factory.js?v=3" charset="utf-8"></script>
-<script src="music.js?v=3" charset="utf-8"></script>
-<script src="online.js?v=3" charset="utf-8"></script>
-<script src="game.js?v=3" charset="utf-8"></script>
+<script src="config.js?v=4" charset="utf-8"></script>
+<script src="data.js?v=4" charset="utf-8"></script>
+<script src="art.js?v=4" charset="utf-8"></script>
+<script src="scene.js?v=4" charset="utf-8"></script>
+<script src="factory.js?v=4" charset="utf-8"></script>
+<script src="music.js?v=4" charset="utf-8"></script>
+<script src="online.js?v=4" charset="utf-8"></script>
+<script src="game.js?v=4" charset="utf-8"></script>
 </body>
 </html>

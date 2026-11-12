@@ -26,8 +26,14 @@ const Online = (() => {
     throw new Error("Không tạo được mã phòng");
   }
   async function getRoom(code) {
-    const rows = await req("GET", `rooms?code=eq.${encodeURIComponent(code)}&select=code,seed`);
+    const rows = await req("GET", `rooms?code=eq.${encodeURIComponent(code)}&select=code,seed,started_at`);
     return rows[0] || null;
+  }
+  // Giáo viên bấm Bắt đầu. Không có quyền cập nhật thì Supabase trả về 0 dòng thay vì báo lỗi.
+  async function startRoom(code) {
+    const rows = await req("PATCH", `rooms?code=eq.${encodeURIComponent(code)}`, { started_at: new Date().toISOString() }, "return=representation");
+    if (!rows || !rows.length) { const e = new Error("no permission"); e.status = 403; throw e; }
+    return rows[0];
   }
   async function join(code, name) {
     const [row] = await req("POST", "players", { room_code: code, name }, "return=representation");
@@ -45,19 +51,19 @@ const Online = (() => {
 
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const num = (n) => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e4 ? (n / 1e3).toFixed(1) + "k" : Math.floor(n).toString();
-  function statusText(p) {
-    if (p.status !== "done") return `<span class="st play">Đang chơi</span>`;
+  function statusText(p, started) {
+    if (p.status !== "done") return started ? `<span class="st play">Đang chơi</span>` : `<span class="st wait">Đang chờ</span>`;
     if (p.won) return `<span class="st win">Thắng</span>`;
     const e = ENDINGS[p.ending];
     return `<span class="st lose" title="${e ? esc(e.title) : ""}">Thua${e ? " · " + esc(e.cond) : ""}</span>`;
   }
   // Bảng xếp hạng HTML; me: id người chơi cần tô sáng; top: số dòng tối đa (vẫn luôn hiện dòng của "me")
-  function board(rows, me, top = 1000) {
+  function board(rows, me, top = 1000, started = true) {
     const r = rank(rows);
     if (!r.length) return `<p class="lb-empty">Chưa có người chơi nào. Hãy nhập mã PIN để vào phòng.</p>`;
     const row = (p, i) => `<tr class="${p.id === me ? "me" : ""}${i < 3 ? " top" + (i + 1) : ""}">
       <td class="rk">${i + 1}</td><td class="nm">${esc(p.name)}</td>
-      <td class="cd">${p.cards}/${WIN_CARDS}</td><td class="mm">🪙 ${num(p.total)} m</td><td>${statusText(p)}</td></tr>`;
+      <td class="cd">${p.cards}/${WIN_CARDS}</td><td class="mm">🪙 ${num(p.total)} m</td><td>${statusText(p, started)}</td></tr>`;
     let body = r.slice(0, top).map(row).join("");
     const mi = r.findIndex(p => p.id === me);
     if (mi >= top) body += `<tr class="gap"><td colspan="5">…</td></tr>` + row(r[mi], mi);
@@ -76,5 +82,5 @@ const Online = (() => {
     };
   }
 
-  return { enabled, createRoom, getRoom, join, update, deleteRoom, leave, list, rank, board, rng };
+  return { enabled, createRoom, getRoom, startRoom, join, update, deleteRoom, leave, list, rank, board, rng, esc };
 })();

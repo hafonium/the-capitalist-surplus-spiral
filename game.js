@@ -400,6 +400,7 @@
     if (e.key === "ArrowLeft" || k === "a") choose("left");
     else if (e.key === "ArrowRight" || k === "d") choose("right");
     else if (k === "m") toggleMusic();
+    else if (e.key === "Escape" && running) $("btn-quit").click();  // Esc = Thoát (có hỏi xác nhận)
     else if (!running || cardOpen) return;
     else if (e.key === " ") { e.preventDefault(); setSpeed(paused ? speed : 0); }
     else if (k === "1" || k === "2" || k === "3") setSpeed(+k);
@@ -677,19 +678,57 @@
       try { localStorage.setItem("capitalist-name", name); } catch {}
       $("join-go").disabled = false; $("join-err").textContent = "";
       history.replaceState(null, "", roomUrl());
-      startGame(false, { code: pin, seed: room.seed, id: p.id, name });
+      const me = { code: pin, seed: room.seed, id: p.id, name };
+      if (room.started_at) startGame(false, me); // vào muộn: phòng đã bắt đầu thì chơi luôn
+      else enterLobby(me);
     } catch (e) {
       err(e.status === 409 ? "Tên này đã có người dùng trong phòng, hãy chọn tên khác." : "Không kết nối được máy chủ. Thử lại sau.");
     }
   };
 
-  let hostCode = null;
+  // ---------- Phòng chờ của người chơi ----------
+  const LOBBY_KEY = "capitalist-lobby";
+  const lobbySet = (o) => { try { o ? localStorage.setItem(LOBBY_KEY, JSON.stringify(o)) : localStorage.removeItem(LOBBY_KEY); } catch {} };
+  const lobbyGet = () => { try { return JSON.parse(localStorage.getItem(LOBBY_KEY)); } catch { return null; } };
+  let lobbyRoom = null;
+  function leaveLobby(msg) {
+    stopPoll(); lobbySet(null); lobbyRoom = null;
+    if (msg) alert(msg);
+    updateStart(); show("screen-start");
+  }
+  function enterLobby(me) {
+    lobbyRoom = me; lobbySet(me);
+    $("lobby-pin").textContent = me.code;
+    $("lobby-name").textContent = me.name;
+    $("lobby-names").innerHTML = `<span class="me">${Online.esc(me.name)}</span>`;
+    show("screen-lobby");
+    poll(async () => {
+      if (!$("screen-lobby").classList.contains("active")) return stopPoll();
+      try {
+        const r = await Online.getRoom(me.code);
+        if (!r) return leaveLobby("Phòng đã bị giáo viên xóa.");
+        if (r.started_at) { stopPoll(); lobbySet(null); lobbyRoom = null; return startGame(false, me); }
+        const rows = await Online.list(me.code);
+        if (!rows.some(p => p.id === me.id)) return leaveLobby("Bạn không còn ở trong phòng này.");
+        $("lobby-n").textContent = rows.length;
+        $("lobby-names").innerHTML = rows.map(p => `<span class="${p.id === me.id ? "me" : ""}">${Online.esc(p.name)}</span>`).join("");
+      } catch {}
+    }, 2000);
+  }
+  $("btn-leave").onclick = () => {
+    if (lobbyRoom) Online.leave(lobbyRoom.id).catch(() => {});
+    leaveLobby();
+  };
+
+  let hostCode = null, hostStarted = false;
   async function openHost() {
     stopPoll();
     $("btn-host").disabled = true;
     try {
       const room = await Online.createRoom();
-      hostCode = room.code;
+      hostCode = room.code; hostStarted = false;
+      $("btn-room-start").disabled = false;
+      $("btn-room-start").textContent = "Bắt đầu";
       $("host-pin").textContent = room.code;
       $("host-url").textContent = roomUrl().replace(/^https?:\/\//, "").replace(/index\.html$/, "");
       show("screen-host");
@@ -697,15 +736,29 @@
         if (!$("screen-host").classList.contains("active")) return stopPoll();
         try {
           const rows = await Online.list(room.code), done = rows.filter(p => p.status === "done").length;
-          $("host-n").textContent = rows.length;
-          $("host-done").textContent = done;
-          $("host-playing").textContent = rows.length - done;
-          $("host-board").innerHTML = Online.board(rows);
+          $("host-stats").innerHTML = hostStarted
+            ? `<b>${rows.length}</b> người chơi · ${rows.length - done} đang chơi · ${done} đã xong`
+            : `<b>${rows.length}</b> người đang chờ · bấm <b>Bắt đầu</b> khi mọi người đã vào`;
+          $("host-board").innerHTML = Online.board(rows, null, 1000, hostStarted);
         } catch {}
       }, 2000);
     } catch { alert("Không tạo được phòng: không kết nối được máy chủ."); }
     $("btn-host").disabled = false;
   }
+
+  $("btn-room-start").onclick = async () => {
+    if (!hostCode || hostStarted) return;
+    const b = $("btn-room-start");
+    b.disabled = true; b.textContent = "Đang bắt đầu…";
+    try {
+      await Online.startRoom(hostCode);
+      hostStarted = true; b.textContent = "Đã bắt đầu";
+      $("host-stats").innerHTML = "Đã bắt đầu, đang tải…";
+    } catch (e) {
+      b.disabled = false; b.textContent = "Bắt đầu";
+      alert(e.status === 403 ? "Chưa có quyền bắt đầu phòng: hãy chạy lại supabase.sql trong Supabase." : "Không kết nối được máy chủ. Thử lại.");
+    }
+  };
 
   $("btn-close-room").onclick = async () => {
     if (!hostCode || !confirm(`Xóa phòng ${hostCode} và toàn bộ kết quả của phòng? Không thể hoàn tác.`)) return;
@@ -762,7 +815,9 @@
   document.addEventListener("keydown", unlock, { once: true });
 
   updateStart();
-  const pinParam = new URLSearchParams(location.search).get("room");
-  if (pinParam && Online.enabled && !running) openJoin(pinParam.replace(/\D/g, "").slice(0, 6));
+  const pinParam = new URLSearchParams(location.search).get("room"), lob = lobbyGet();
+  if (lob && Online.enabled && !S) enterLobby(lob);          // tải lại trang khi đang ở phòng chờ
+  else if (pinParam && Online.enabled && !running) openJoin(pinParam.replace(/\D/g, "").slice(0, 6));
+  if (lob && S) lobbySet(null);
   requestAnimationFrame(tick);
 })();

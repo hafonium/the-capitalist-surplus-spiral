@@ -89,17 +89,18 @@ Vượt qua **20 tình huống** mà không chạm ngưỡng nào để đạt k
 | **Kết cục** | Bộ sưu tập 9 kết cục: đã đạt / chưa đạt kèm điều kiện |
 | **Nhạc** (M) | Bật/tắt nhạc nền (điệu valse; chuyển giọng thứ khi gặp nguy) |
 | **Âm thanh** | Bật/tắt tiếng nhà xưởng và hiệu ứng |
-| **Thoát** | Bỏ ván đang chơi và về màn hình chính (có hỏi xác nhận) |
+| **Thoát** (Esc) | Bỏ ván đang chơi và về màn hình chính (có hỏi xác nhận) |
 
 ### 6. Chơi lại
 Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh viễn (+10% mỗi điểm, tối đa ×2,5). Thắng được +5 trở lên, thua chỉ được +1. Tiến trình được **tự động lưu** trong trình duyệt. Khi mở lại trang, màn hình chính có nút **Tiếp tục ván đang chơi**; ván chơi một mình còn được cộng thêm một phần thặng dư tạo ra trong lúc vắng mặt (tối đa 8 giờ). Bắt đầu ván mới khi còn ván dở thì game hỏi trước khi bỏ ván đó.
 
 ## Chơi theo phòng (kiểu Kahoot)
 
-Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số** và màn hình bảng xếp hạng (chiếu lên máy chiếu). Người chơi bấm **Vào phòng bằng mã PIN**, nhập mã và tên, rồi chơi. Bảng xếp hạng cập nhật trực tiếp trong lúc chơi; khi kết thúc, người chơi thấy hạng của mình.
+Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số** và màn hình bảng xếp hạng (chiếu lên máy chiếu). Người chơi bấm **Vào phòng bằng mã PIN**, nhập mã và tên, rồi **chờ ở phòng chờ** (thấy danh sách người đã vào). Khi mọi người đã vào, giáo viên bấm **Bắt đầu** và tất cả cùng bắt đầu chơi. Bảng xếp hạng cập nhật trực tiếp trong lúc chơi; khi kết thúc, người chơi thấy hạng của mình.
 
 - Mọi người trong phòng gặp **cùng thứ tự thẻ tình huống** và **cùng mục tiêu**; gia sản thừa kế không được tính, nên ai cũng xuất phát như nhau.
 - Xếp hạng: **thắng** trước, rồi **số tình huống vượt qua**, rồi **tổng thặng dư tích lũy**.
+- Ai vào phòng sau khi đã bắt đầu thì được chơi ngay. Ở phòng chờ có thể bấm **Rời phòng**; tải lại trang vẫn quay về phòng chờ.
 - Mỗi tên chỉ chơi một lượt trong một phòng. Muốn chơi lại thì vào bằng tên khác.
 - Người chơi bấm **Thoát** giữa chừng thì tên bị xóa khỏi bảng xếp hạng (có thể vào lại bằng tên cũ).
 - Giáo viên bấm **Kết thúc & xóa phòng** để xóa phòng và toàn bộ kết quả của phòng.
@@ -113,7 +114,7 @@ Phòng chơi dùng [Supabase](https://supabase.com) làm cơ sở dữ liệu. N
 3. Vào **Project Settings → API**, chép **Project URL** và khóa công khai (**publishable** hoặc **anon**) vào `config.js`.
 4. Commit và đẩy lên GitHub Pages như bình thường.
 
-Đã cài từ trước? Chạy lại toàn bộ `supabase.sql` (an toàn khi chạy nhiều lần) để có quyền xóa phòng và thoát phòng. Muốn dọn dữ liệu thủ công: trong SQL Editor chạy `delete from rooms;` (xóa mọi phòng và kết quả) hoặc `delete from rooms where created_at < now() - interval '1 day';` (chỉ phòng cũ hơn 1 ngày).
+Đã cài từ trước? Chạy lại toàn bộ `supabase.sql` (an toàn khi chạy nhiều lần) để có cột `started_at` cho nút **Bắt đầu** và quyền xóa phòng, thoát phòng. Muốn dọn dữ liệu thủ công: trong SQL Editor chạy `delete from rooms;` (xóa mọi phòng và kết quả) hoặc `delete from rooms where created_at < now() - interval '1 day';` (chỉ phòng cũ hơn 1 ngày).
 
 Khóa công khai được phép để trong mã trình duyệt. **Không** dùng khóa `service_role` / secret. Game không chống gian lận: điểm được tính trên máy người chơi.
 
@@ -121,7 +122,7 @@ Khóa công khai được phép để trong mã trình duyệt. **Không** dùng
 
 | File | Vai trò |
 |---|---|
-| `index.html` | Các màn hình: bắt đầu, vào phòng, phòng của giáo viên, chơi, thẻ bài, kết cục |
+| `index.html` | Các màn hình: bắt đầu, vào phòng, phòng chờ, phòng của giáo viên, chơi, thẻ bài, kết cục |
 | `style.css` | Giao diện kiểu Victorian |
 | `game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, tốc độ, sổ tay, bộ sưu tập, lưu game |
 | `data.js` | Nội dung: thẻ tình huống, thẻ hệ quả, nâng cấp, kết cục, mục tiêu mỗi đời, tóm tắt bài giảng |
