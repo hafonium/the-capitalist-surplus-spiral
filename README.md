@@ -17,8 +17,17 @@ Cần internet ở lần đầu để tải font (Playfair Display, Be Vietnam P
 
 Bạn là nhà tư bản vừa thừa kế một xưởng công nghiệp ở nước Anh thế kỷ 19. Mục tiêu: **giữ cả 4 chỉ số trong khoảng 0–100 và sống sót qua 20 tình huống.**
 
+### Bố cục màn chơi
+Mọi thành phần nằm trong một khung giấy viền đồng, từ trên xuống:
+
+1. **Cảnh nhà xưởng**: máy móc và công nhân thay đổi theo c/v và v.
+2. **Thanh Tình huống kế tiếp** (màu cam): đếm ngược tới thẻ tiếp theo ("Còn 6s"), nhấp nháy trong 3 giây cuối; nút **Gọi ngay ▸** gọi thẻ ngay.
+3. **Bảng điều khiển** (nền sáng): Thặng dư (🪙 … m), Thu nhập (m/s), Tỷ suất m', đời thừa kế & mục tiêu, số tình huống, nút tốc độ, Sổ tay, Kết cục, Nhạc, Âm thanh.
+4. **Bốn chỉ số**: c/v, v, z+r, m_td.
+5. **Cửa hàng nâng cấp**: bốn nâng cấp tương ứng bốn chỉ số.
+
 ### 1. Thặng dư m tự chảy về
-Số **Thặng dư m** tăng mỗi giây (xem mục *Thu nhập*). Ô **Tỷ suất m'** = m/v cho biết mức bóc lột hiện tại; thanh nhỏ bên dưới chia ngày lao động 12 giờ thành thời gian **cần thiết** (xanh) và **thặng dư** (đỏ), như ví dụ 6h + 6h = 100% trong bài giảng.
+Số **Thặng dư** (hiển thị dạng 🪙 73 *m*) tăng mỗi giây (xem mục *Thu nhập*, đơn vị m/s). Ô **Tỷ suất m'** = m/v cho biết mức bóc lột hiện tại; thanh nhỏ bên dưới chia ngày lao động 12 giờ thành thời gian **cần thiết** (xanh) và **thặng dư** (đỏ), như ví dụ 6h + 6h = 100% trong bài giảng.
 
 - **v thấp** → m' cao, lời nhanh, nhưng công nhân kiệt sức.
 - **v cao** → tiền công ăn vào giá trị mới, thu nhập co lại; **v = 100 thì thu nhập bằng 0**.
@@ -43,7 +52,7 @@ Cả bốn chỉ số **tự giảm dần theo thời gian**. Hãy dùng m để
 Mỗi nâng cấp có ô **Giá** (vàng; chuyển đỏ và ghi số còn thiếu khi chưa đủ m) và ô **Cấp** riêng. Giá tăng dần theo mỗi cấp.
 
 ### 3. Thẻ tình huống
-Khoảng 12 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một trong 13 thẻ tình huống. Thời gian dừng lại cho đến khi bạn chọn.
+Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 12 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một trong 13 thẻ tình huống. Thời gian dừng lại cho đến khi bạn chọn.
 
 - **Kéo thẻ sang trái** hoặc bấm nút **A** / phím **←** (hoặc `A`) → Phương án A
 - **Kéo thẻ sang phải** hoặc bấm nút **B** / phím **→** (hoặc `D`) → Phương án B
