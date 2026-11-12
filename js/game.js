@@ -2,8 +2,8 @@
   const $ = (id) => document.getElementById(id);
   const $$ = (sel) => document.querySelectorAll(sel);
   const SAVE_KEY = "capitalist-spiral-v1";
-  const CARD_INTERVAL = 12;      // giây giữa các thẻ (ở tốc độ 1×)
-  const FIRST_CARD = 6;
+  const CARD_INTERVAL = 18;      // giây giữa các thẻ (ở tốc độ 1×) — nhịp chậm, chơi thư thả
+  const FIRST_CARD = 10;
   const MAX_OFFLINE = 8 * 3600;
   const LOAN_PENALTY = 8;        // thiếu m khi chọn phương án tốn m -> vay nóng, z+r giảm thêm
   const MAX_MULT = 2.5;          // trần hệ số gia sản thừa kế
@@ -42,7 +42,7 @@
     if (g.check(S, mult())) {
       S.goalState = "done";
       sfx.good();
-      showNote(`Đạt mục tiêu đời ${S.gen}: ${g.text}. ${g.hint}. Gia sản thừa kế +2 khi kết thúc ván.`);
+      showNote(`🎯 Đạt mục tiêu: ${g.text} (+2 gia sản)`);
     } else if (g.fail && g.fail(S)) S.goalState = "fail";
   }
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -98,8 +98,7 @@
     $("shop").innerHTML = UPGRADES.map(u =>
       `<button class="up" id="up-${u.id}" style="--c:${METERS[u.meter].color}"><div class="ib">${METERS[u.meter].icon}</div>
        <div class="t">${u.name}</div><div class="d">${u.desc}</div>
-       <div class="tags"><span class="price" id="uc-${u.id}"></span><span class="lvl" id="ul-${u.id}"></span></div>
-       <div class="th">${u.theory}</div></button>`).join("");
+       <div class="tags"><span class="price" id="uc-${u.id}"></span><span class="lvl" id="ul-${u.id}"></span></div></button>`).join("");
     UPGRADES.forEach(u => $("up-" + u.id).onclick = () => buy(u));
   }
   function refreshMeters() {
@@ -134,7 +133,6 @@
     const nec = 12 * clamp(S.meters.v, 0, 100) / 100, h = (x) => (Math.round(x * 2) / 2).toString().replace(".", ",") + "h";
     $("m-day").innerHTML = `<i style="width:${100 * nec / 12}%"></i>`;
     $("m-day").title = `Ngày lao động 12h: ${h(nec)} cần thiết (v) · ${h(12 - nec)} thặng dư (m)`;
-    $("m-day-t").textContent = `${h(nec)} cần thiết · ${h(12 - nec)} thặng dư`;
     UPGRADES.forEach(u => {
       const c = cost(u), b = $("up-" + u.id), ok = S.m >= c;
       $("uc-" + u.id).textContent = ok ? `Giá ${fmt(c)} m` : `Giá ${fmt(c)} m · thiếu ${fmt(c - S.m)}`;
@@ -180,7 +178,7 @@
     S.meters[u.meter] += u.amt;
     sfx.buy();
     floatText(`${METERS[u.meter].short} +${u.amt}`, METERS[u.meter].color);
-    if (learn("u-" + u.id)) showNote(`${u.theory}. ${u.more}`, true);
+    showResult(FORMULA[u.id], { fx: { [u.meter]: u.amt } }, learn("u-" + u.id));
     checkGoal();
     refreshMeters(); refreshTop();
     checkEnd();
@@ -222,7 +220,6 @@
     if (o.later) h += `<span class="chip later" title="Lựa chọn này sẽ quay lại sau vài tình huống">⏳ có hệ quả về sau</span>`;
     return h;
   }
-  const hintText = (o) => Object.entries(o.fx).map(([k, d]) => `${METERS[k].short} ${sgn(d)}`).join(" · ");
 
   // Thẻ hệ quả đến hạn được ưu tiên; nó thay cho thẻ thường nên ván không dài thêm
   const laterFor = (id, side) => FOLLOWUPS.some(f => f.from[0] === id && f.from[1] === side);
@@ -258,8 +255,6 @@
     $("card-text").textContent = current.text;
     $("lbl-l").innerHTML = `<div class="ol"><b>A</b> ${current.left.label}</div><div class="chips">${chips(opts.left)}</div>`;
     $("lbl-r").innerHTML = `<div class="ol"><b>B</b> ${current.right.label}</div><div class="chips">${chips(opts.right)}</div>`;
-    $("card-hint-l").textContent = "← " + hintText(opts.left);
-    $("card-hint-r").textContent = hintText(opts.right) + " →";
     $("card-overlay").classList.remove("hidden");
     $("note-toast").classList.add("hidden");   // ô học thuật đã lưu trong Sổ tay, không che nhãn phương án
     resetCard(true);
@@ -324,8 +319,7 @@
       }
       S.cards++;
       S.cardTimer = CARD_INTERVAL;
-      const isNew = learn(noteId);
-      showNote((opt.loan ? "Không đủ m, bạn phải vay nóng (z+r −" + LOAN_PENALTY + "). " : "") + opt.note, isNew);
+      showResult(FORMULA[current.id], opt, learn(noteId));
       checkGoal();
       refreshMeters(); refreshTop();
       const hit = Object.values(S.meters).some(v => v <= 0 || v >= 100);
@@ -336,8 +330,21 @@
   }
 
   let noteT = null;
+  // Ngay khi chọn: một công thức + các chỉ số thay đổi (giải thích dài nằm trong Sổ tay)
+  function showResult(formula, o, isNew) {
+    const n = $("note-toast");
+    n.className = "result";
+    n.innerHTML = `<button class="nt-x" title="Đóng" aria-label="Đóng">×</button>` +
+      (formula ? `<div class="rf"></div>` : "") + `<div class="chips">${chips({ ...o, later: false })}</div>` +
+      (isNew ? `<span class="nt-new">📖 Đã lưu giải thích vào Sổ tay</span>` : "");
+    if (formula) n.querySelector(".rf").textContent = formula;
+    if (isNew) sfx.learn();
+    clearTimeout(noteT);
+    noteT = setTimeout(() => n.classList.add("hidden"), 4500);
+  }
   function showNote(text, isNew) {
     const n = $("note-toast");
+    n.className = "";
     n.innerHTML = `<button class="nt-x" title="Đóng" aria-label="Đóng">×</button><span class="nt-h">Học thuật${isNew ? ' <em>Mới · đã lưu vào Sổ tay</em>' : ""}</span>`;
     n.appendChild(document.createTextNode(text));
     n.classList.remove("hidden");
@@ -434,10 +441,10 @@
 
     // Sức hao mòn theo thời gian: buộc người chơi phải chi thặng dư
     const M = S.meters;
-    M.cv -= 0.16 * dt;
-    M.v  -= 0.12 * dt;
-    M.zr -= 0.20 * dt;
-    M.td -= 0.10 * dt;
+    M.cv -= 0.10 * dt;
+    M.v  -= 0.07 * dt;
+    M.zr -= 0.12 * dt;
+    M.td -= 0.06 * dt;
 
     S.cardTimer -= dt;
     if (S.cardTimer <= 0) {

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;700&display=swap&subset=vietnamese" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
 <div id="app">
@@ -21,7 +21,7 @@
       <h2>Vòng Xoáy Thặng Dư</h2>
       <div class="rule"><span></span><i></i><span></span></div>
       <p class="quote">“Anh/Chị là một nhà tư bản, sau khi thực hiện hành vi ‘bóc lột’ giai cấp công nhân thì anh/chị sẽ sử dụng giá trị thặng dư đó như thế nào?”</p>
-      <p class="how">Thặng dư <b>m</b> do lao động làm thuê tạo ra tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
+      <p class="how">Tiêu thặng dư <b>m</b> để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b>. Qua <b>20 tình huống</b> là thắng.</p>
       <button id="btn-resume" class="big alt hidden"></button>
       <button id="btn-start" class="big">Chơi một mình</button>
       <div class="room-actions online-only">
@@ -98,7 +98,7 @@
     <div id="topbar">
       <div class="stat big-stat"><span class="lbl">Thặng dư</span><span class="m-line"><span class="coin" aria-hidden="true">🪙</span><span id="m-val">0</span><span class="m-unit">m</span></span></div>
       <div class="stat" id="st-rate"><span class="lbl">Thu nhập</span><span>+<b id="m-rate">0</b> m/s</span></div>
-      <div class="stat" id="st-ex" title="Tỷ suất giá trị thặng dư m' = m/v = thời gian lao động thặng dư / thời gian lao động cần thiết. Tiền công (v) càng cao thì phần thặng dư càng mỏng, thu nhập càng thấp."><span class="lbl">Tỷ suất m'</span><span><b id="m-ex">100%</b> <small id="m-day-t"></small></span><span id="m-day"></span></div>
+      <div class="stat" id="st-ex" title="Tỷ suất giá trị thặng dư m' = m/v = thời gian lao động thặng dư / thời gian lao động cần thiết. Tiền công (v) càng cao thì phần thặng dư càng mỏng, thu nhập càng thấp."><span class="lbl">Tỷ suất m'</span><span><b id="m-ex">100%</b></span><span id="m-day"></span></div>
       <div class="stat goal" id="st-goal"><span class="lbl" id="gen-lbl"></span><span id="goal-txt"></span></div>
       <div class="stat"><span class="lbl">Tình huống</span><span><b id="card-count">0</b>/20 <small id="year"></small></span></div>
       <div id="speed" title="Tốc độ (phím Space / 1 / 2 / 3)">
@@ -130,7 +130,6 @@
         <div class="card-tag" id="card-tag"></div>
         <div class="who" id="card-who"></div>
         <div class="said" id="card-text"></div>
-        <div class="hint"><span id="card-hint-l"></span><span id="card-hint-r"></span></div>
       </div>
     </div>
     <div id="card-buttons">
@@ -178,13 +177,13 @@
   </section>
 
 </div>
-<script src="js/config.js?v=8" charset="utf-8"></script>
-<script src="js/data.js?v=8" charset="utf-8"></script>
-<script src="js/art.js?v=8" charset="utf-8"></script>
-<script src="js/scene.js?v=8" charset="utf-8"></script>
-<script src="js/factory.js?v=8" charset="utf-8"></script>
-<script src="js/music.js?v=8" charset="utf-8"></script>
-<script src="js/online.js?v=8" charset="utf-8"></script>
-<script src="js/game.js?v=8" charset="utf-8"></script>
+<script src="js/config.js?v=10" charset="utf-8"></script>
+<script src="js/data.js?v=10" charset="utf-8"></script>
+<script src="js/art.js?v=10" charset="utf-8"></script>
+<script src="js/scene.js?v=10" charset="utf-8"></script>
+<script src="js/factory.js?v=10" charset="utf-8"></script>
+<script src="js/music.js?v=10" charset="utf-8"></script>
+<script src="js/online.js?v=10" charset="utf-8"></script>
+<script src="js/game.js?v=10" charset="utf-8"></script>
 </body>
 </html>

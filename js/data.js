@@ -239,3 +239,31 @@ const GOALS = [
 
 const WIN_CARDS = 20;
 const START_YEAR = 1844;
+
+// Công thức ngắn hiện ngay khi chọn (thay cho đoạn giải thích dài; giải thích đầy đủ vẫn lưu trong Sổ tay).
+// Khóa: id thẻ tình huống / thẻ hệ quả, hoặc id nâng cấp.
+const FORMULA = {
+  1: "m' = t' / t  (thời gian thặng dư / thời gian cần thiết)",
+  2: "Ngày lao động = t + t'",
+  3: "m → lợi tức z (trả cho tư bản cho vay)",
+  4: "m → địa tô r (trả cho địa chủ)",
+  5: "Tập trung: K₁ + K₂ → K lớn hơn",
+  6: "m = m tích lũy + m tiêu dùng",
+  7: "Giá trị mới = v + m",
+  8: "c/v ↑ → năng suất ↑ → t ↓",
+  9: "v + m cố định: v ↑ thì m ↓",
+  10: "m → lợi nhuận thương nghiệp",
+  11: "T – H – T'  ·  T' = T + ΔT",
+  12: "Tiền công thực tế = danh nghĩa / giá cả",
+  13: "m siêu ngạch = giá trị xã hội − giá trị cá biệt",
+  101: "m → lợi tức z",
+  102: "v + m cố định: v ↑ thì m ↓",
+  103: "Ngày lao động bị giới hạn → t' ↓",
+  104: "Tín dụng → tập trung tư bản",
+  105: "c/v ↑ → cầu về sức lao động ↓",
+  106: "Khấu hao: c cố định chuyển dần vào sản phẩm",
+  machine: "c ↑ → c/v ↑ → năng suất ↑",
+  wage: "v ↑ → m' = m / v ↓",
+  debt: "p = lợi nhuận + z + r",
+  luxury: "m = m tích lũy + m tiêu dùng",
+};

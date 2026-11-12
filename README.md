@@ -6,7 +6,7 @@ Trò chơi web (idle + thẻ bài quẹt) cho học phần **Kinh tế chính tr
 
 ## Nội dung học thuật
 
-Toàn bộ thẻ tình huống, ô *Học thuật*, Sổ tay và kết cục bám theo bài giảng **Chương 3: Giá trị thặng dư trong nền kinh tế thị trường** của học phần (slide bài giảng không kèm trong repo): công thức T – H – T', hàng hóa sức lao động, tư bản bất biến/khả biến, m' = m/v, GTTD tuyệt đối/tương đối/siêu ngạch, tích lũy, tích tụ và tập trung, lợi nhuận, lợi tức z, địa tô r. Trích dẫn ghi theo *C. Mác, Tư bản, tập I* (tài liệu tham khảo [4], [5] của bài giảng). Sổ tay có thêm mục **Tóm tắt bài giảng Chương 3** luôn mở.
+Toàn bộ thẻ tình huống, công thức khi chọn, Sổ tay và kết cục bám theo bài giảng **Chương 3: Giá trị thặng dư trong nền kinh tế thị trường** của học phần (slide bài giảng không kèm trong repo): công thức T – H – T', hàng hóa sức lao động, tư bản bất biến/khả biến, m' = m/v, GTTD tuyệt đối/tương đối/siêu ngạch, tích lũy, tích tụ và tập trung, lợi nhuận, lợi tức z, địa tô r. Trích dẫn ghi theo *C. Mác, Tư bản, tập I* (tài liệu tham khảo [4], [5] của bài giảng). Sổ tay có thêm mục **Tóm tắt bài giảng Chương 3** luôn mở.
 
 ## Cách chạy
 
@@ -54,7 +54,7 @@ Cả bốn chỉ số **tự giảm dần theo thời gian**. Hãy dùng m để
 Mỗi nâng cấp có ô **Giá** (vàng; chuyển đỏ và ghi số còn thiếu khi chưa đủ m) và ô **Cấp** riêng. Giá tăng dần theo mỗi cấp.
 
 ### 3. Thẻ tình huống
-Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 12 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một trong 13 thẻ tình huống. Thời gian dừng lại cho đến khi bạn chọn.
+Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 18 giây một lần (hoặc bấm **Gọi ngay** / phím `N`), một nhân vật (quản đốc, ngân hàng, địa chủ, công đoàn, thương nhân…) đưa ra một trong 13 thẻ tình huống. Thời gian dừng lại cho đến khi bạn chọn.
 
 - **Kéo thẻ sang trái** hoặc bấm nút **A** / phím **←** (hoặc `A`) → Phương án A
 - **Kéo thẻ sang phải** hoặc bấm nút **B** / phím **→** (hoặc `D`) → Phương án B
@@ -62,7 +62,7 @@ Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 12 giây một l
 
 Mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Trên máy tính, thẻ nằm phía trên 4 chỉ số và hai phương án A/B ở hai bên thẻ, nên 4 chỉ số luôn hiện rõ; khi kéo thẻ hoặc rê chuột vào phương án, con số thay đổi hiện ngay trên đầu từng thanh chỉ số. Trên điện thoại, thẻ phủ toàn màn hình và hai phương án nằm bên dưới thẻ. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
 
-Sau khi chọn, một ô *Học thuật* hiện ở cuối màn hình, giải thích khái niệm kinh tế chính trị đằng sau lựa chọn đó và được lưu vào **Sổ tay học thuật**. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
+Ngay khi chọn, một ô nhỏ hiện ở cuối màn hình với **một công thức** liên quan (ví dụ *m' = t' / t*, *Giá trị mới = v + m*) và **các chỉ số vừa thay đổi**. Game giữ ít chữ cho nhịp chơi thư thả; phần giải thích đầy đủ được lưu vào **Sổ tay học thuật** để đọc sau. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
 
 ### 3b. Hệ quả về sau (kiểu Reigns)
 Một số lựa chọn có nhãn **⏳ có hệ quả về sau**: 2–4 tình huống sau, một thẻ hệ quả (viền đỏ) sẽ quay lại, ví dụ chây ỳ lợi tức thì thừa phát lại tới, phớt lờ Luật Công xưởng thì thanh tra tới. Có 6 thẻ hệ quả; chúng **thay cho** thẻ thường và vẫn tính vào 20 tình huống, nên ván không dài thêm.
@@ -87,7 +87,7 @@ Vượt qua **20 tình huống** mà không chạm ngưỡng nào để đạt k
 |---|---|
 | `❚❚` `1×` `2×` `3×` (Space, 1, 2, 3) | Tạm dừng / đổi tốc độ |
 | **Gọi ngay** (N) | Gọi tình huống kế tiếp ngay |
-| **Sổ tay** | Xem lại mọi ô *Học thuật* đã mở (42 mục, kể cả thẻ hệ quả), phần giải thích mở rộng và tóm tắt bài giảng |
+| **Sổ tay** | Xem lại giải thích của mọi lựa chọn đã gặp (42 mục, kể cả thẻ hệ quả), phần giải thích mở rộng và tóm tắt bài giảng |
 | **Kết cục** | Bộ sưu tập 9 kết cục: đã đạt / chưa đạt kèm điều kiện |
 | **Nhạc** (M) | Bật/tắt nhạc nền (điệu valse; chuyển giọng thứ khi gặp nguy) |
 | **Âm thanh** | Bật/tắt tiếng nhà xưởng và hiệu ứng |
@@ -101,7 +101,7 @@ Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh vi�
 Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số** và màn hình bảng xếp hạng (chiếu lên máy chiếu). Người chơi bấm **Vào phòng bằng mã PIN**, nhập mã và tên, rồi **chờ ở phòng chờ** (thấy danh sách người đã vào). Khi mọi người đã vào, giáo viên bấm **Bắt đầu** và tất cả cùng bắt đầu chơi. Bảng xếp hạng cập nhật trực tiếp trong lúc chơi; khi kết thúc, người chơi thấy hạng của mình.
 
 - Mọi người trong phòng gặp **cùng thứ tự thẻ tình huống** và **cùng mục tiêu**; gia sản thừa kế không được tính, nên ai cũng xuất phát như nhau.
-- Xếp hạng: **thắng** trước, rồi **số tình huống vượt qua**, rồi **tổng thặng dư tích lũy**.
+- Xếp hạng theo **số tình huống sống sót** (vòng); bằng nhau thì ai **tạo ra nhiều thặng dư hơn** (tổng thặng dư tích lũy) xếp trên.
 - Ai vào phòng sau khi đã bắt đầu thì được chơi ngay. Ở phòng chờ có thể bấm **Rời phòng**; tải lại trang vẫn quay về phòng chờ.
 - Mỗi tên chỉ chơi một lượt trong một phòng. Muốn chơi lại thì vào bằng tên khác.
 - Người chơi bấm **Thoát** giữa chừng thì tên bị xóa khỏi bảng xếp hạng (có thể vào lại bằng tên cũ).
