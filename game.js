@@ -594,7 +594,15 @@
     save();
   }
 
-  $("btn-start").onclick = () => startGame(false);
+  // Bắt đầu ván mới khi còn ván dở: hỏi trước, ván phòng thì rút tên khỏi bảng xếp hạng
+  function discardSaved() {
+    if (!S || running) return true;
+    if (!confirm("Bạn còn một ván đang chơi dở. Bỏ ván đó để bắt đầu ván mới?")) return false;
+    if (S.room) Online.leave(S.room.id).catch(() => {});
+    S = null; offlineGain = 0; save(); updateStart();
+    return true;
+  }
+  $("btn-start").onclick = () => { if (discardSaved()) startGame(false); };
   $("btn-restart").onclick = () => { updateStart(); startGame(false); };
 
   // ---------- Bật/tắt âm thanh ----------
@@ -612,6 +620,9 @@
     $("legacy-note").textContent = (gen ? `Người kế vị: đời thứ ${gen + 1}, ${HEIRS[gen % HEIRS.length]} ${FAMILY}` : `Gia tộc ${FAMILY} · đời thứ 1`) +
       (legacy ? ` · Gia sản thừa kế ${legacy} (thu nhập ×${mult().toFixed(2)}) · kỷ lục ${bestCards}/${WIN_CARDS} tình huống` : "");
     $("btn-restart").textContent = `Đời thứ ${gen + 1}: thừa kế & chơi lại`;
+    const canResume = !!S && !running;
+    $("btn-resume").classList.toggle("hidden", !canResume);
+    if (canResume) $("btn-resume").textContent = `Tiếp tục ván đang chơi · ${S.room ? "Phòng " + S.room.code : "Đời thứ " + (S.gen || 1)} · ${S.cards}/${WIN_CARDS}`;
   }
 
   // ---------- Chơi theo phòng ----------
@@ -657,6 +668,7 @@
     const err = (t) => { $("join-err").textContent = t; $("join-go").disabled = false; };
     if (!/^\d{6}$/.test(pin)) return err("Mã PIN gồm 6 chữ số.");
     if (!name) return err("Hãy nhập tên.");
+    if (!discardSaved()) return;
     $("join-go").disabled = true; $("join-err").textContent = "Đang vào phòng…";
     try {
       const room = await Online.getRoom(pin);
@@ -722,6 +734,15 @@
   if (!Online.enabled) $$(".online-only").forEach(e => e.classList.add("hidden"));
 
   // ---------- Khởi tạo & tiến trình ngoại tuyến ----------
+  // Ván đang dở không tự mở lại: màn hình chính hiện nút "Tiếp tục"
+  let offlineGain = 0;
+  $("btn-resume").onclick = () => {
+    if (!S || running) return;
+    const gain = offlineGain; offlineGain = 0;
+    S.m += gain; S.total += gain;
+    startGame(true);
+    if (gain > 0) showNote(`Trong lúc vắng mặt, xưởng đã tạo thêm ${fmt(gain)} m.`);
+  };
   const saved = store.get();
   if (saved) {
     legacy = saved.legacy || 0; bestCards = saved.bestCards || 0; muted = !!saved.muted; musicOff = !!saved.musicOff;
@@ -731,10 +752,7 @@
       if (!S.gen) { S.gen = gen = gen || 1; S.heir = HEIRS[0]; S.goal = GOALS[0].id; S.goalState = ""; S.pending = []; }
       const off = Math.min(MAX_OFFLINE, (Date.now() - (saved.lastSeen || Date.now())) / 1000);
       if (!S.seed) { S.seed = 1 + Math.floor(Math.random() * 2147483646); S.drawn = 0; }
-      const gain = off > 5 && !S.room ? rate() * off * 0.5 : 0;
-      S.m += gain; S.total += gain;
-      startGame(true);
-      if (gain > 0) showNote(`Trong lúc vắng mặt, xưởng đã tạo thêm ${fmt(gain)} m.`);
+      offlineGain = off > 5 && !S.room ? rate() * off * 0.5 : 0;
     }
   }
   labels(); updateCounts();
