@@ -46,8 +46,8 @@ const Online = (() => {
   const list = (code) =>
     req("GET", `players?room_code=eq.${encodeURIComponent(code)}&select=id,name,status,cards,total,ending,won&limit=500`);
 
-  // Xếp hạng: thắng trước, rồi số tình huống vượt qua, rồi tổng thặng dư tích lũy
-  const rank = (rows) => rows.slice().sort((a, b) => (b.won - a.won) || (b.cards - a.cards) || (b.total - a.total));
+  // Xếp hạng theo số tình huống sống sót; bằng nhau thì so tổng thặng dư tạo ra
+  const rank = (rows) => rows.slice().sort((a, b) => (b.cards - a.cards) || (b.total - a.total));
 
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const num = (n) => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e4 ? (n / 1e3).toFixed(1) + "k" : Math.floor(n).toString();
