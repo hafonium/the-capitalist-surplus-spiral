@@ -137,7 +137,10 @@
       $("ul-" + u.id).textContent = `Cấp ${S.levels[u.id] || 0}`;
       b.disabled = !ok || cardOpen;
     });
+    const tLeft = Math.max(0, Math.ceil(S.cardTimer));
     $("card-timer-fill").style.width = cardOpen ? "100%" : Math.min(100, 100 * (1 - S.cardTimer / (S.cards ? CARD_INTERVAL : FIRST_CARD))) + "%";
+    $("card-timer-txt").textContent = cardOpen ? "Đang diễn ra" : paused ? `Tạm dừng · còn ${tLeft}s` : `Còn ${tLeft}s`;
+    $("timer-row").classList.toggle("soon", !cardOpen && !paused && S.cardTimer <= 3);
     $("pause-banner").classList.toggle("hidden", !(paused && !cardOpen));
   }
 

@@ -35,11 +35,20 @@
 
   <!-- Màn hình chơi -->
   <section id="screen-play" class="screen">
-    <header id="meters"></header>
+   <div id="frame">
+    <div id="scene-wrap"><svg id="scene" viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice"></svg>
+      <div id="pause-banner" class="hidden">TẠM DỪNG<small>Bấm 1×, 2×, 3× hoặc Space để tiếp tục</small></div>
+    </div>
+
+    <div id="timer-row">
+      <span class="lbl">⏳ Tình huống kế tiếp</span>
+      <div id="card-timer" title="Thời gian đến tình huống kế tiếp"><div id="card-timer-fill"></div><span id="card-timer-txt"></span></div>
+      <button id="btn-next" title="Phím N">Gọi ngay ▸</button>
+    </div>
 
     <div id="topbar">
-      <div class="stat big-stat"><span class="lbl">Thặng dư m</span><span id="m-val">0</span></div>
-      <div class="stat" id="st-rate"><span class="lbl">Thu nhập</span><span><b id="m-rate">0</b>/s</span></div>
+      <div class="stat big-stat"><span class="lbl">Thặng dư</span><span class="m-line"><span class="coin" aria-hidden="true">🪙</span><span id="m-val">0</span><span class="m-unit">m</span></span></div>
+      <div class="stat" id="st-rate"><span class="lbl">Thu nhập</span><span>+<b id="m-rate">0</b> m/s</span></div>
       <div class="stat" id="st-ex" title="Tỷ suất giá trị thặng dư m' = m/v = thời gian lao động thặng dư / thời gian lao động cần thiết. Tiền công (v) càng cao thì phần thặng dư càng mỏng, thu nhập càng thấp."><span class="lbl">Tỷ suất m'</span><span><b id="m-ex">100%</b> <small id="m-day-t"></small></span><span id="m-day"></span></div>
       <div class="stat goal" id="st-goal"><span class="lbl" id="gen-lbl"></span><span id="goal-txt"></span></div>
       <div class="stat"><span class="lbl">Tình huống</span><span><b id="card-count">0</b>/20 <small id="year"></small></span></div>
@@ -54,18 +63,11 @@
       </div>
     </div>
 
-    <div id="scene-wrap"><svg id="scene" viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice"></svg>
-      <div id="pause-banner" class="hidden">TẠM DỪNG<small>Bấm 1×, 2×, 3× hoặc Space để tiếp tục</small></div>
-    </div>
+    <header id="meters"></header>
 
     <div id="shop"></div>
-
-    <div id="timer-row">
-      <span class="lbl">Tình huống kế tiếp</span>
-      <div id="card-timer" title="Thời gian đến tình huống kế tiếp"><div id="card-timer-fill"></div></div>
-      <button id="btn-next" title="Phím N">Gọi ngay ▸</button>
-    </div>
     <div id="float-layer"></div>
+   </div>
   </section>
 
   <!-- Thẻ tình huống (lớp phủ) -->
