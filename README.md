@@ -93,11 +93,30 @@ Vượt qua **20 tình huống** mà không chạm ngưỡng nào để đạt k
 ### 6. Chơi lại
 Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh viễn (+10% mỗi điểm, tối đa ×2,5). Thắng được +5 trở lên, thua chỉ được +1. Tiến trình được **tự động lưu** trong trình duyệt, và khi bạn quay lại xưởng sẽ tạo thêm một phần thặng dư trong lúc vắng mặt (tối đa 8 giờ).
 
+## Chơi theo phòng (kiểu Kahoot)
+
+Giáo viên bấm **Tạo phòng (giáo viên)** để nhận **mã PIN 6 số** và màn hình bảng xếp hạng (chiếu lên máy chiếu). Người chơi bấm **Vào phòng bằng mã PIN**, nhập mã và tên, rồi chơi. Bảng xếp hạng cập nhật trực tiếp trong lúc chơi; khi kết thúc, người chơi thấy hạng của mình.
+
+- Mọi người trong phòng gặp **cùng thứ tự thẻ tình huống** và **cùng mục tiêu**; gia sản thừa kế không được tính, nên ai cũng xuất phát như nhau.
+- Xếp hạng: **thắng** trước, rồi **số tình huống vượt qua**, rồi **tổng thặng dư tích lũy**.
+- Mỗi tên chỉ chơi một lượt trong một phòng. Muốn chơi lại thì vào bằng tên khác.
+- Có thể gửi link dạng `…/?room=123456` để mở sẵn màn hình nhập tên.
+
+### Cài đặt máy chủ (một lần, miễn phí)
+Phòng chơi dùng [Supabase](https://supabase.com) làm cơ sở dữ liệu. Nếu chưa cấu hình, game vẫn chơi một mình bình thường và ẩn các nút phòng.
+
+1. Tạo tài khoản và một project mới trên Supabase.
+2. Vào **SQL Editor**, dán toàn bộ nội dung `supabase.sql`, bấm **Run**.
+3. Vào **Project Settings → API**, chép **Project URL** và khóa công khai (**publishable** hoặc **anon**) vào `config.js`.
+4. Commit và đẩy lên GitHub Pages như bình thường.
+
+Khóa công khai được phép để trong mã trình duyệt. **Không** dùng khóa `service_role` / secret. Game không chống gian lận: điểm được tính trên máy người chơi.
+
 ## Cấu trúc
 
 | File | Vai trò |
 |---|---|
-| `index.html` | Các màn hình: bắt đầu, chơi, thẻ bài, kết cục |
+| `index.html` | Các màn hình: bắt đầu, vào phòng, phòng của giáo viên, chơi, thẻ bài, kết cục |
 | `style.css` | Giao diện kiểu Victorian |
 | `game.js` | Logic: vòng lặp, chỉ số, thẻ, kết cục, tốc độ, sổ tay, bộ sưu tập, lưu game |
 | `data.js` | Nội dung: thẻ tình huống, thẻ hệ quả, nâng cấp, kết cục, mục tiêu mỗi đời, tóm tắt bài giảng |
@@ -105,4 +124,7 @@ Sau mỗi ván bạn nhận **gia sản thừa kế** tăng thu nhập vĩnh vi�
 | `scene.js` | Cảnh nhà xưởng hoạt hình |
 | `factory.js` | Âm thanh nền nhà xưởng: tiếng máy ù, khung dệt, hơi nước, búa (tổng hợp bằng WebAudio) |
 | `music.js` | Nhạc nền valse tổng hợp bằng WebAudio |
+| `online.js` | Chơi theo phòng: gọi Supabase, bảng xếp hạng, bộ sinh số ngẫu nhiên theo hạt giống |
+| `config.js` | Địa chỉ và khóa công khai Supabase (để trống = chỉ chơi một mình) |
+| `supabase.sql` | Tạo bảng `rooms`, `players` và quyền truy cập trên Supabase |
 | `t_i_li_u_thi_t_k_game_kinh_t_ch_nh_tr.md` | Tài liệu đặc tả thiết kế (đã cập nhật khớp với game) |

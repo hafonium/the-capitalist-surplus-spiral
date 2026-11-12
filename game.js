@@ -20,17 +20,21 @@
   let endSeen = {};              // kết cục đã đạt: { key: số lần }
   let gen = 0;                   // số đời thừa kế đã bắt đầu
   let S = null;                  // trạng thái ván hiện tại
-  let running = false, cardOpen = false, current = null, opts = null, deck = [], last = 0;
+  let running = false, cardOpen = false, current = null, opts = null, last = 0;
   let speed = 1, paused = false, modalOpen = false;
 
-  function fresh() {
-    gen++;
-    const goal = GOALS[Math.floor(Math.random() * GOALS.length)].id;
+  // room: { code, seed, id, name } khi chơi theo phòng; cùng hạt giống → cùng thứ tự thẻ và mục tiêu
+  function fresh(room) {
+    if (!room) gen++;
+    const seed = room ? room.seed : 1 + Math.floor(Math.random() * 2147483646);
+    const goal = GOALS[Math.floor(Online.rng(seed ^ 0x2545F491)() * GOALS.length)].id;
     return { m: 0, total: 0, meters: { cv: 50, v: 50, zr: 50, td: 50 }, levels: {}, cards: 0, cardTimer: FIRST_CARD, t: 0,
-      gen, heir: HEIRS[(gen - 1) % HEIRS.length], goal, goalState: "", pending: [] };
+      gen: room ? 1 : gen, heir: room ? "" : HEIRS[(gen - 1) % HEIRS.length], goal, goalState: "", pending: [],
+      seed, drawn: 0, room: room || null };
   }
   const goalOf = () => GOALS.find(g => g.id === S.goal);
-  const heirName = (s) => `${s.heir || HEIRS[0]} ${FAMILY}`;
+  const heirName = (s) => s.room ? s.room.name : `${s.heir || HEIRS[0]} ${FAMILY}`;
+  const genLabel = (s) => s.room ? `Phòng ${s.room.code} · ${s.room.name}` : `Đời thứ ${s.gen || 1} · ${heirName(s)}`;
   // Mục tiêu của đời này: kiểm tra mỗi khung hình, chốt khi đạt hoặc trượt
   function checkGoal() {
     const g = goalOf();
@@ -42,7 +46,8 @@
     } else if (g.fail && g.fail(S)) S.goalState = "fail";
   }
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-  const mult = () => Math.min(MAX_MULT, 1 + 0.1 * legacy);
+  // Chơi theo phòng: bỏ qua gia sản thừa kế để mọi người xuất phát như nhau
+  const mult = () => S && S.room ? 1 : Math.min(MAX_MULT, 1 + 0.1 * legacy);
   const incomeBonus = () => UPGRADES.reduce((a, u) => a + (S.levels[u.id] || 0) * u.income, 0);
 
   // Năng suất theo c/v: tăng đến ~70 rồi giảm (máy thừa, thiếu lao động sống)
@@ -121,7 +126,7 @@
     $("card-count").textContent = S.cards;
     $("year").textContent = "· năm " + (START_YEAR + S.cards);
     const g = goalOf();
-    $("gen-lbl").textContent = `Đời thứ ${S.gen || 1} · ${heirName(S)}`;
+    $("gen-lbl").textContent = genLabel(S);
     $("goal-txt").textContent = g ? (S.goalState === "done" ? "✓ " : S.goalState === "fail" ? "✗ " : "◎ ") + g.text : "";
     $("goal-txt").title = g ? `Mục tiêu đời này (thưởng +2 gia sản): ${g.hint}` : "";
     $("st-goal").className = "stat goal " + (S.goalState || "");
@@ -220,6 +225,18 @@
 
   // Thẻ hệ quả đến hạn được ưu tiên; nó thay cho thẻ thường nên ván không dài thêm
   const laterFor = (id, side) => FOLLOWUPS.some(f => f.from[0] === id && f.from[1] === side);
+  // Thứ tự thẻ suy ra từ hạt giống: mỗi vòng 13 thẻ xáo lại, không lặp thẻ ở chỗ nối hai vòng
+  function cycleOrder(cyc) {
+    const r = Online.rng(S.seed + cyc * 7919), a = CARDS.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    if (cyc > 0) { const prev = cycleOrder(cyc - 1); if (a[0].id === prev[prev.length - 1].id) [a[0], a[a.length - 1]] = [a[a.length - 1], a[0]]; }
+    return a;
+  }
+  function drawCard() {
+    const i = S.drawn || 0, n = CARDS.length;
+    S.drawn = i + 1;
+    return cycleOrder(Math.floor(i / n))[i % n];
+  }
   function nextCard() {
     S.pending = S.pending || [];
     const due = S.pending.findIndex(p => p.at <= S.cards);
@@ -227,11 +244,7 @@
       current = FOLLOWUPS.find(f => f.id === S.pending[due].id);
       S.pending.splice(due, 1);
     } else {
-      if (!deck.length) {
-        deck = CARDS.slice().sort(() => Math.random() - 0.5);
-        if (current && deck[deck.length - 1].id === current.id) deck.unshift(deck.pop());
-      }
-      current = deck.pop();
+      current = drawCard();
     }
     const fu = current.from;
     opts = { left: { ...prep(current.left), later: !fu && laterFor(current.id, "L") },
@@ -286,7 +299,7 @@
     const sd = side === "left" ? "L" : "R", noteId = `c${current.id}${sd}`;
     // Hẹn thẻ hệ quả sau 2–4 tình huống (không quá tình huống cuối)
     for (const f of FOLLOWUPS) if (f.from[0] === current.id && f.from[1] === sd && !S.pending.some(p => p.id === f.id))
-      S.pending.push({ id: f.id, at: Math.min(WIN_CARDS - 1, S.cards + 3 + Math.floor(Math.random() * 3)) });
+      S.pending.push({ id: f.id, at: Math.min(WIN_CARDS - 1, S.cards + 3 + Math.floor(Online.rng(S.seed + f.id * 131)() * 3)) });
     setTimeout(() => {
       cardOpen = false;
       $("card-overlay").classList.add("hidden");
@@ -381,6 +394,7 @@
   }
 
   document.addEventListener("keydown", e => {
+    if (e.target.closest && e.target.closest("input, textarea")) return; // đang gõ PIN / tên
     if (modalOpen) { if (e.key === "Escape") closeModal(); return; }
     const k = e.key.toLowerCase();
     if (e.key === "ArrowLeft" || k === "a") choose("left");
@@ -502,9 +516,9 @@
     $(id).classList.add("active");
   }
 
-  function startGame(resume) {
-    if (!resume) S = fresh();
-    running = true; cardOpen = false; deck = []; current = null;
+  function startGame(resume, room) {
+    if (!resume) S = fresh(room);
+    running = true; cardOpen = false; current = null;
     $("card-overlay").classList.add("hidden");
     show("screen-play");
     buildMeters(); buildShop();
@@ -539,10 +553,11 @@
     const isNew = !endSeen[key];
     endSeen[key] = (endSeen[key] || 0) + 1;
     // Thua chỉ để lại ít gia sản; thắng mới tích lũy đáng kể
+    const room = S.room;
     const goalBonus = S.goalState === "done" ? 2 : 0, g = goalOf();
-    const gain = (e.good ? 5 + Math.floor(Math.sqrt(S.total / 200)) : 1) + goalBonus;
+    const gain = room ? 0 : (e.good ? 5 + Math.floor(Math.sqrt(S.total / 200)) : 1) + goalBonus;
     legacy += gain;
-    bestCards = Math.max(bestCards, S.cards);
+    if (!room) bestCards = Math.max(bestCards, S.cards);
 
     const scr = $("screen-end");
     scr.querySelectorAll(".coin-rain").forEach(x => x.remove());
@@ -558,10 +573,16 @@
       const v = Math.round(clamp(M[k], 0, 100)), hit = v <= 0 || v >= 100;
       return `<span class="fm${hit ? " hit" : ""}" style="--c:${METERS[k].color}">${METERS[k].short} <b>${v}</b></span>`;
     }).join("") + `<span class="fm" style="--c:#b08d3c">m' <b>${(() => { const x = exploitation(M.v); return x > 999 ? ">999" : Math.round(x); })()}%</b></span>`;
-    $("end-gen").textContent = `Đời thứ ${S.gen || 1} · ${heirName(S)}`;
-    $("end-stats").innerHTML = (g ? `Mục tiêu đời này: <b>${g.text}</b> ${goalBonus ? "✓ đạt (+2 gia sản)" : "✗ chưa đạt"}<br>` : "") + `Thặng dư tích lũy: <b>${fmt(S.total)} m</b> · Tình huống đã qua: <b>${S.cards}/${WIN_CARDS}</b><br>
+    $("end-gen").textContent = genLabel(S);
+    $("end-stats").innerHTML = room
+      ? `Thặng dư tích lũy: <b>${fmt(S.total)} m</b> · Tình huống đã qua: <b>${S.cards}/${WIN_CARDS}</b>`
+      : (g ? `Mục tiêu đời này: <b>${g.text}</b> ${goalBonus ? "✓ đạt (+2 gia sản)" : "✗ chưa đạt"}<br>` : "") + `Thặng dư tích lũy: <b>${fmt(S.total)} m</b> · Tình huống đã qua: <b>${S.cards}/${WIN_CARDS}</b><br>
       Gia sản thừa kế +${gain} → tổng ${legacy} (thu nhập ×${mult().toFixed(2)}${mult() >= MAX_MULT ? ", đã tối đa" : ""})<br>
       Kết cục đã mở: <b>${Object.keys(endSeen).length}/${ENDING_ORDER.length}</b>`;
+    $("end-room").classList.toggle("hidden", !room);
+    $("btn-restart").classList.toggle("hidden", !!room);
+    $("btn-home").classList.toggle("hidden", !room);
+    if (room) finishRoom(room, { status: "done", cards: S.cards, total: S.total, ending: key, won: !!e.good });
     show("screen-end");
     (e.good ? sfx.good : sfx.bad)();
     Music.setMood(e.good ? "win" : "sad");
@@ -593,6 +614,90 @@
     $("btn-restart").textContent = `Đời thứ ${gen + 1}: thừa kế & chơi lại`;
   }
 
+  // ---------- Chơi theo phòng ----------
+  let pollTimer = null;
+  const stopPoll = () => { clearInterval(pollTimer); pollTimer = null; };
+  function poll(fn, ms) { stopPoll(); fn(); pollTimer = setInterval(fn, ms); }
+  const roomUrl = () => location.origin + location.pathname;
+
+  // Gửi tiến độ đang chơi để bảng xếp hạng cập nhật trực tiếp
+  setInterval(() => {
+    if (running && S && S.room) Online.update(S.room.id, { status: "playing", cards: S.cards, total: S.total }).catch(() => {});
+  }, 3000);
+
+  async function finishRoom(room, result) {
+    for (let i = 0; i < 5; i++) {
+      try { await Online.update(room.id, result); break; }
+      catch { await new Promise(r => setTimeout(r, 1500 * (i + 1))); }
+    }
+    $("end-rank").textContent = "Đang tải bảng xếp hạng…";
+    poll(async () => {
+      if (!$("screen-end").classList.contains("active")) return stopPoll();
+      try {
+        const rows = await Online.list(room.code), r = Online.rank(rows), i = r.findIndex(p => p.id === room.id);
+        const waiting = rows.filter(p => p.status !== "done").length;
+        $("end-rank").innerHTML = `Phòng ${room.code} · Hạng của bạn: <b>#${i + 1}</b> / ${rows.length}` +
+          (waiting ? ` <small>(${waiting} người còn đang chơi)</small>` : "");
+        $("end-board").innerHTML = Online.board(rows, room.id, 10);
+      } catch { $("end-rank").textContent = "Không tải được bảng xếp hạng, đang thử lại…"; }
+    }, 3000);
+  }
+
+  function openJoin(pin) {
+    stopPoll();
+    $("join-err").textContent = "";
+    if (pin) $("join-pin").value = pin;
+    try { $("join-name").value = $("join-name").value || localStorage.getItem("capitalist-name") || ""; } catch {}
+    show("screen-join");
+    ($("join-pin").value ? $("join-name") : $("join-pin")).focus();
+  }
+  $("join-form").onsubmit = async (ev) => {
+    ev.preventDefault();
+    const pin = $("join-pin").value.trim(), name = $("join-name").value.trim().replace(/\s+/g, " ");
+    const err = (t) => { $("join-err").textContent = t; $("join-go").disabled = false; };
+    if (!/^\d{6}$/.test(pin)) return err("Mã PIN gồm 6 chữ số.");
+    if (!name) return err("Hãy nhập tên.");
+    $("join-go").disabled = true; $("join-err").textContent = "Đang vào phòng…";
+    try {
+      const room = await Online.getRoom(pin);
+      if (!room) return err("Không tìm thấy phòng với mã này.");
+      const p = await Online.join(pin, name);
+      try { localStorage.setItem("capitalist-name", name); } catch {}
+      $("join-go").disabled = false; $("join-err").textContent = "";
+      history.replaceState(null, "", roomUrl());
+      startGame(false, { code: pin, seed: room.seed, id: p.id, name });
+    } catch (e) {
+      err(e.status === 409 ? "Tên này đã có người dùng trong phòng, hãy chọn tên khác." : "Không kết nối được máy chủ. Thử lại sau.");
+    }
+  };
+
+  async function openHost() {
+    stopPoll();
+    $("btn-host").disabled = true;
+    try {
+      const room = await Online.createRoom();
+      $("host-pin").textContent = room.code;
+      $("host-url").textContent = roomUrl().replace(/^https?:\/\//, "").replace(/index\.html$/, "");
+      show("screen-host");
+      poll(async () => {
+        if (!$("screen-host").classList.contains("active")) return stopPoll();
+        try {
+          const rows = await Online.list(room.code), done = rows.filter(p => p.status === "done").length;
+          $("host-n").textContent = rows.length;
+          $("host-done").textContent = done;
+          $("host-playing").textContent = rows.length - done;
+          $("host-board").innerHTML = Online.board(rows);
+        } catch {}
+      }, 2000);
+    } catch { alert("Không tạo được phòng: không kết nối được máy chủ."); }
+    $("btn-host").disabled = false;
+  }
+
+  $("btn-join").onclick = () => openJoin();
+  $("btn-host").onclick = openHost;
+  $$("[data-home]").forEach(b => b.onclick = () => { stopPoll(); updateStart(); show("screen-start"); });
+  if (!Online.enabled) $$(".online-only").forEach(e => e.classList.add("hidden"));
+
   // ---------- Khởi tạo & tiến trình ngoại tuyến ----------
   const saved = store.get();
   if (saved) {
@@ -602,7 +707,8 @@
       S = saved.S;
       if (!S.gen) { S.gen = gen = gen || 1; S.heir = HEIRS[0]; S.goal = GOALS[0].id; S.goalState = ""; S.pending = []; }
       const off = Math.min(MAX_OFFLINE, (Date.now() - (saved.lastSeen || Date.now())) / 1000);
-      const gain = off > 5 ? rate() * off * 0.5 : 0;
+      if (!S.seed) { S.seed = 1 + Math.floor(Math.random() * 2147483646); S.drawn = 0; }
+      const gain = off > 5 && !S.room ? rate() * off * 0.5 : 0;
       S.m += gain; S.total += gain;
       startGame(true);
       if (gain > 0) showNote(`Trong lúc vắng mặt, xưởng đã tạo thêm ${fmt(gain)} m.`);
@@ -615,5 +721,7 @@
   document.addEventListener("keydown", unlock, { once: true });
 
   updateStart();
+  const pinParam = new URLSearchParams(location.search).get("room");
+  if (pinParam && Online.enabled && !running) openJoin(pinParam.replace(/\D/g, "").slice(0, 6));
   requestAnimationFrame(tick);
 })();

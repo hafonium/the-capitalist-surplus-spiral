@@ -23,13 +23,45 @@
       <p class="quote">“Anh/Chị là một nhà tư bản, sau khi thực hiện hành vi ‘bóc lột’ giai cấp công nhân thì anh/chị sẽ sử dụng giá trị thặng dư đó như thế nào?”</p>
       <p class="formula-line">T – H <small>(TLSX, SLĐ)</small> … SX … H' – T' <small>· T' = T + ΔT</small></p>
       <p class="how">Thặng dư <b>m</b> do lao động làm thuê tạo ra tự chảy về mỗi giây. Hãy chi nó để giữ <b>4 chỉ số</b> trong khoảng <b>0–100</b> và quyết định các tình huống xuất hiện. Sống sót qua <b>20 tình huống</b> để thắng.</p>
-      <button id="btn-start" class="big">Bắt đầu kinh doanh</button>
+      <button id="btn-start" class="big">Chơi một mình</button>
+      <div class="room-actions online-only">
+        <button id="btn-join" class="big alt">Vào phòng bằng mã PIN</button>
+        <button id="btn-host" class="ghost">Tạo phòng (giáo viên)</button>
+      </div>
       <div class="sub-actions">
         <button class="ghost" data-open="codex">Sổ tay học thuật <span class="cnt" data-cnt="codex"></span></button>
         <button class="ghost" data-open="endings">Bộ sưu tập kết cục <span class="cnt" data-cnt="endings"></span></button>
         <button class="ghost" data-toggle="music">Nhạc: Bật</button>
       </div>
       <p id="legacy-note" class="small"></p>
+    </div>
+  </section>
+
+  <!-- Vào phòng: nhập mã PIN + tên -->
+  <section id="screen-join" class="screen">
+    <div class="start-inner">
+      <p class="eyebrow">Chơi theo phòng</p>
+      <h2 class="room-h">Vào phòng</h2>
+      <div class="rule"><span></span><i></i><span></span></div>
+      <form id="join-form" class="join-form" autocomplete="off">
+        <label>Mã PIN<input id="join-pin" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" required></label>
+        <label>Tên của bạn<input id="join-name" maxlength="24" placeholder="Ví dụ: Minh Triết" required></label>
+        <p id="join-err" class="form-err"></p>
+        <button id="join-go" class="big" type="submit">Vào chơi</button>
+      </form>
+      <div class="sub-actions"><button class="ghost" data-home>← Màn hình chính</button></div>
+    </div>
+  </section>
+
+  <!-- Giáo viên: mã PIN + bảng xếp hạng trực tiếp -->
+  <section id="screen-host" class="screen">
+    <div class="host-inner">
+      <p class="eyebrow">Mã PIN của phòng</p>
+      <div id="host-pin" class="pin"></div>
+      <p class="host-how">Vào <b id="host-url"></b>, chọn <b>Vào phòng bằng mã PIN</b> rồi nhập mã trên.</p>
+      <p class="host-count"><b id="host-n">0</b> người chơi · <span id="host-playing">0</span> đang chơi · <span id="host-done">0</span> đã xong</p>
+      <div id="host-board"></div>
+      <div class="sub-actions"><button class="ghost" data-home>← Màn hình chính</button></div>
     </div>
   </section>
 
@@ -114,7 +146,12 @@
       <p id="end-why" class="end-why"></p>
       <div id="end-final"></div>
       <div id="end-stats" class="small"></div>
+      <div id="end-room" class="hidden">
+        <p class="end-rank" id="end-rank"></p>
+        <div id="end-board"></div>
+      </div>
       <button id="btn-restart" class="big">Thừa kế &amp; chơi lại</button>
+      <button id="btn-home" class="big hidden" data-home>Về màn hình chính</button>
       <div class="sub-actions">
         <button class="ghost" data-open="codex">Sổ tay học thuật <span class="cnt" data-cnt="codex"></span></button>
         <button class="ghost" data-open="endings">Bộ sưu tập kết cục <span class="cnt" data-cnt="endings"></span></button>
@@ -123,11 +160,13 @@
   </section>
 
 </div>
+<script src="config.js" charset="utf-8"></script>
 <script src="data.js" charset="utf-8"></script>
 <script src="art.js" charset="utf-8"></script>
 <script src="scene.js" charset="utf-8"></script>
 <script src="factory.js" charset="utf-8"></script>
 <script src="music.js" charset="utf-8"></script>
+<script src="online.js" charset="utf-8"></script>
 <script src="game.js" charset="utf-8"></script>
 </body>
 </html>
