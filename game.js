@@ -270,7 +270,7 @@
   // Thẻ chỉ chiếm phần màn hình phía trên 4 chỉ số, để vẫn thấy chỉ số thay đổi khi kéo thẻ
   function layoutCard() {
     const top = $("meters").getBoundingClientRect().top, ov = $("card-overlay");
-    const fits = top >= 480 && innerWidth > 640; // điện thoại / màn hình thấp: thẻ phủ toàn màn hình như cũ
+    const fits = top >= 320 && innerWidth > 640; // điện thoại / màn hình thấp: thẻ phủ toàn màn hình như cũ
     document.body.classList.toggle("card-above", fits);
     ov.style.setProperty("--avail", fits ? top - 8 + "px" : "100vh");
     ov.style.setProperty("--below", fits ? innerHeight - top + 12 + "px" : "12px");
