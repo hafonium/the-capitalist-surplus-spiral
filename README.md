@@ -62,7 +62,7 @@ Khi thanh **Tình huống kế tiếp** chạy đầy, khoảng 18 giây một l
 
 Mỗi phương án ghi rõ **chỉ số nào đổi bao nhiêu** và **được/mất bao nhiêu m**. Trên máy tính, thẻ nằm phía trên 4 chỉ số và hai phương án A/B ở hai bên thẻ, nên 4 chỉ số luôn hiện rõ; khi kéo thẻ hoặc rê chuột vào phương án, con số thay đổi hiện ngay trên đầu từng thanh chỉ số. Trên điện thoại, thẻ phủ toàn màn hình và hai phương án nằm bên dưới thẻ. Nếu phương án tốn m mà bạn không đủ, bạn trả hết số đang có và phải **vay nóng** (z+r −8), điều này cũng được báo trước.
 
-Ngay khi chọn, một ô nhỏ hiện ở cuối màn hình với **một công thức** liên quan (ví dụ *m' = t' / t*, *Giá trị mới = v + m*) và **các chỉ số vừa thay đổi**. Game giữ ít chữ cho nhịp chơi thư thả; phần giải thích đầy đủ được lưu vào **Sổ tay học thuật** để đọc sau. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
+Ngay khi chọn, một ô nhỏ hiện ở cuối màn hình với **một công thức** liên quan (ví dụ *m' = t' / t × 100%*, *Giá trị mới = v + m*, *Lợi tức: 0 < z < p bình quân*) và **các chỉ số vừa thay đổi**. Game giữ ít chữ cho nhịp chơi thư thả; phần giải thích đầy đủ được lưu vào **Sổ tay học thuật** để đọc sau. Ô tự ẩn sau vài giây; bấm nút **×** (hoặc bấm vào ô) để tắt ngay.
 
 ### 3b. Hệ quả về sau (kiểu Reigns)
 Một số lựa chọn có nhãn **⏳ có hệ quả về sau**: 2–4 tình huống sau, một thẻ hệ quả (viền đỏ) sẽ quay lại, ví dụ chây ỳ lợi tức thì thừa phát lại tới, phớt lờ Luật Công xưởng thì thanh tra tới. Có 6 thẻ hệ quả; chúng **thay cho** thẻ thường và vẫn tính vào 20 tình huống, nên ván không dài thêm.

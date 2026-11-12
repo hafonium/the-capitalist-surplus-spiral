@@ -31,7 +31,7 @@ const CARDS = [
     left:  { label: "Hãy đợi đấy! Tiền đang dồn mở xưởng.", fx: { zr: -30, td: 10 }, m: 15,
       note: "Chiếm dụng lợi tức thuộc về nhà tư bản cho vay: quyền sử dụng tư bản đã tách khỏi quyền sở hữu nó." },
     right: { label: "Thanh toán sòng phẳng theo tỷ suất z'.", fx: { zr: 20, td: -15 }, m: -20,
-      note: "Lợi tức z là một phần lợi nhuận bình quân mà nhà tư bản đi vay phải trả cho nhà tư bản cho vay (0 < z < p̄)." },
+      note: "Lợi tức z là một phần lợi nhuận bình quân mà nhà tư bản đi vay phải trả cho nhà tư bản cho vay (0 < z < p bình quân)." },
     more: "Tư bản cho vay vận động theo công thức T – T' (T' = T + z), trông như tiền tự đẻ ra tiền nên là hình thái \"được sùng bái nhất\". Thực chất z vẫn là một phần giá trị thặng dư tạo ra trong sản xuất. Tỷ suất lợi tức z' = z / tổng tư bản cho vay × 100%. Phần còn lại cho nhà tư bản hoạt động: thu nhập xí nghiệp = lợi nhuận − lợi tức." },
   { id: 4, who: "Bá tước Địa chủ", topic: "Địa tô tư bản chủ nghĩa (r)",
     text: "Mảnh đất xưởng của ngài nằm sát đường sắt mới khánh thành, mỏ than của ngài cũng đào trên đất của tôi. Tôi yêu cầu tăng địa tô!",
@@ -99,10 +99,10 @@ const CARDS = [
   { id: 13, who: "Nhà tư bản đối thủ", topic: "GTTD siêu ngạch và lợi nhuận bình quân",
     text: "Xưởng tôi vừa lắp máy mới, giá trị cá biệt tấm vải của tôi thấp hơn giá trị thị trường 20%. Ngài đuổi theo, hay rút vốn sang ngành đường sắt đang lời hơn?",
     left:  { label: "Rút bớt vốn sang ngành đường sắt.", fx: { cv: -10, zr: 5, td: 5 }, m: 15,
-      note: "Tư bản chạy sang ngành có tỷ suất lợi nhuận cao: cạnh tranh giữa các ngành hình thành tỷ suất lợi nhuận bình quân p̄'." },
+      note: "Tư bản chạy sang ngành có tỷ suất lợi nhuận cao: cạnh tranh giữa các ngành hình thành tỷ suất lợi nhuận bình quân." },
     right: { label: "Đầu tư công nghệ, vượt mặt đối thủ!", fx: { cv: 15, td: -10 }, m: -20,
       note: "GTTD siêu ngạch: thu được nhờ tăng năng suất lao động cá biệt, làm giá trị cá biệt thấp hơn giá trị thị trường." },
-    more: "GTTD siêu ngạch là hình thức biến tướng của GTTD tương đối: siêu ngạch do năng suất cá biệt, nhà tư bản cá biệt thu được; tương đối do năng suất xã hội, toàn bộ giai cấp tư bản thu được. Cạnh tranh giữa các ngành hình thành tỷ suất lợi nhuận bình quân p̄' = Σm / Σ(c+v); lợi nhuận bình quân p̄ = p̄' × k, và giá trị hàng hóa chuyển thành giá cả sản xuất = k + p̄." },
+    more: "GTTD siêu ngạch là hình thức biến tướng của GTTD tương đối: siêu ngạch do năng suất cá biệt, nhà tư bản cá biệt thu được; tương đối do năng suất xã hội, toàn bộ giai cấp tư bản thu được. Cạnh tranh giữa các ngành hình thành tỷ suất lợi nhuận bình quân = Σm / Σ(c+v); lợi nhuận bình quân = tỷ suất lợi nhuận bình quân × k, và giá trị hàng hóa chuyển thành giá cả sản xuất = k + p bình quân." },
 ];
 
 // Nâng cấp mua bằng thặng dư m (chi phí tăng theo cấp)
@@ -138,9 +138,9 @@ const LECTURE = [
   { t: "Tích lũy tư bản",
     d: "Bản chất: chuyển hóa một phần GTTD thành tư bản. Nhân tố tăng quy mô: m', năng suất lao động, sử dụng hiệu quả máy móc, đại lượng tư bản ứng trước. Hệ quả: tăng cấu tạo hữu cơ c/v; tăng tích tụ và tập trung; tăng chênh lệch thu nhập giữa nhà tư bản và người lao động." },
   { t: "Chi phí sản xuất, lợi nhuận, tỷ suất lợi nhuận",
-    d: "k = c + v; G = k + m = k + p. Lợi nhuận p là hình thái thần bí của m, khiến ta tưởng m do cả (c + v) sinh ra. p' = m / (c + v) × 100% < m'. Nhân tố ảnh hưởng p': m', c/v, tốc độ chu chuyển, tiết kiệm c. Cạnh tranh giữa các ngành tạo p̄' và giá cả sản xuất = k + p̄." },
+    d: "k = c + v; G = k + m = k + p. Lợi nhuận p là hình thái thần bí của m, khiến ta tưởng m do cả (c + v) sinh ra. p' = m / (c + v) × 100% < m'. Nhân tố ảnh hưởng p': m', c/v, tốc độ chu chuyển, tiết kiệm c. Cạnh tranh giữa các ngành tạo ra tỷ suất lợi nhuận bình quân và giá cả sản xuất = k + p bình quân." },
   { t: "Các hình thức biểu hiện của GTTD",
-    d: "Lợi nhuận công nghiệp, lợi nhuận thương nghiệp, lợi tức z (0 < z < p̄), địa tô r (tuyệt đối, chênh lệch I, chênh lệch II). Tất cả đều từ lao động thặng dư của công nhân làm thuê." },
+    d: "Lợi nhuận công nghiệp, lợi nhuận thương nghiệp, lợi tức z (0 < z < p bình quân), địa tô r (tuyệt đối, chênh lệch I, chênh lệch II). Tất cả đều từ lao động thặng dư của công nhân làm thuê." },
   { t: "Tư sản và vô sản",
     d: "Giai cấp tư sản: những người sở hữu TLSX xã hội và sử dụng lao động làm thuê. Giai cấp vô sản: những công nhân làm thuê, vì mất TLSX nên buộc phải bán SLĐ để sống (Tuyên ngôn của Đảng Cộng sản, 1848). Mục đích nghiên cứu GTTD của Marx: chỉ ra nguồn gốc duy nhất của GTTD là lao động làm thuê, từ đó vạch ra sứ mệnh lịch sử của giai cấp công nhân." },
 ];
@@ -245,7 +245,7 @@ const START_YEAR = 1844;
 const FORMULA = {
   1: "m' = t' / t × 100%  (thời gian thặng dư / thời gian cần thiết)",
   2: "Ngày lao động = t + t'",
-  3: "0 < z < p̄  (lợi tức là một phần lợi nhuận bình quân)",
+  3: "Lợi tức: 0 < z < p bình quân",
   4: "Địa tô r = phần m (lợi nhuận siêu ngạch) trả cho địa chủ",
   5: "Tích tụ: tư bản hóa m  ·  Tập trung: TB A + TB B → TB lớn hơn",
   6: "m = m tích lũy + m tiêu dùng",
