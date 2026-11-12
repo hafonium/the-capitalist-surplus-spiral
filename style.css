@@ -28,10 +28,13 @@ button { font-family: inherit; cursor: pointer; }
 #screen-start, #screen-end, #screen-join, #screen-host, #screen-lobby {
   position: fixed; inset: 0; max-width: none; z-index: 30; padding: 0; --tint: #3a332c;
   background: radial-gradient(ellipse at 50% 30%, #3a332c 0%, var(--coal) 70%) var(--coal);
-  color: #eadfc2; align-items: center; justify-content: center; overflow: auto;
+  color: #eadfc2; align-items: center; justify-content: flex-start; overflow: auto;
 }
 #screen-start:not(.active), #screen-end:not(.active), #screen-join:not(.active), #screen-host:not(.active), #screen-lobby:not(.active) { display: none; }
 .start-inner, .end-inner { width: min(680px, 92vw); text-align: center; padding: 24px 0; animation: fadein .8s ease both; }
+/* margin: auto căn giữa khi vừa màn hình, nhưng khi nội dung dài hơn thì bắt đầu từ trên cùng và cuộn được
+   (justify-content: center sẽ đẩy phần đầu ra ngoài vùng cuộn) */
+.start-inner, .end-inner, .host-inner { margin: auto; flex: none; }
 @keyframes fadein { from { opacity: 0; transform: translateY(14px); } }
 .eyebrow { text-transform: uppercase; letter-spacing: .28em; font-size: .72rem; color: var(--brass-hi); margin: 0 0 8px; }
 h1 {
