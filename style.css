@@ -215,6 +215,10 @@ button.off { opacity: .6; text-decoration: line-through; text-decoration-thickne
 .tool { background: #fffaf0; border: 1px solid var(--brass); color: var(--ink); border-radius: 4px; padding: 5px 10px; font-size: .8rem; font-weight: 500; }
 .tool:hover { background: var(--brass-hi); }
 #topbar .cnt { background: var(--coal); color: var(--brass-hi); }
+.tool.quit { border-color: #c0453a; color: #b3261e; font-weight: 700; }
+.tool.quit:hover { background: #b3261e; color: #fff; }
+button.ghost.danger { border-color: #c0453a; color: #ffb4ad; }
+button.ghost.danger:hover { background: #b3261e; color: #fff; border-color: #ff9c94; }
 
 /* ---------- Tạm dừng ---------- */
 #scene-wrap { position: relative; }

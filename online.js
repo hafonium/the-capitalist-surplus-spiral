@@ -35,6 +35,8 @@ const Online = (() => {
   }
   const update = (id, patch) =>
     req("PATCH", `players?id=eq.${encodeURIComponent(id)}`, { ...patch, updated_at: new Date().toISOString() }, "return=minimal");
+  const deleteRoom = (code) => req("DELETE", `rooms?code=eq.${encodeURIComponent(code)}`, null, "return=minimal");
+  const leave = (id) => req("DELETE", `players?id=eq.${encodeURIComponent(id)}`, null, "return=minimal");
   const list = (code) =>
     req("GET", `players?room_code=eq.${encodeURIComponent(code)}&select=id,name,status,cards,total,ending,won&limit=500`);
 
@@ -74,5 +76,5 @@ const Online = (() => {
     };
   }
 
-  return { enabled, createRoom, getRoom, join, update, list, rank, board, rng };
+  return { enabled, createRoom, getRoom, join, update, deleteRoom, leave, list, rank, board, rng };
 })();

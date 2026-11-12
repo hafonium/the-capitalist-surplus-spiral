@@ -671,11 +671,13 @@
     }
   };
 
+  let hostCode = null;
   async function openHost() {
     stopPoll();
     $("btn-host").disabled = true;
     try {
       const room = await Online.createRoom();
+      hostCode = room.code;
       $("host-pin").textContent = room.code;
       $("host-url").textContent = roomUrl().replace(/^https?:\/\//, "").replace(/index\.html$/, "");
       show("screen-host");
@@ -692,6 +694,27 @@
     } catch { alert("Không tạo được phòng: không kết nối được máy chủ."); }
     $("btn-host").disabled = false;
   }
+
+  $("btn-close-room").onclick = async () => {
+    if (!hostCode || !confirm(`Xóa phòng ${hostCode} và toàn bộ kết quả của phòng? Không thể hoàn tác.`)) return;
+    try { await Online.deleteRoom(hostCode); }
+    catch { return alert("Không xóa được phòng: không kết nối được máy chủ hoặc chưa cấp quyền xóa (chạy lại supabase.sql)."); }
+    hostCode = null; stopPoll(); updateStart(); show("screen-start");
+  };
+
+  // Bỏ ván đang chơi; chơi theo phòng thì rút tên khỏi bảng xếp hạng
+  $("btn-quit").onclick = () => {
+    if (!running) return;
+    const room = S.room;
+    if (!confirm(room ? "Thoát khỏi phòng? Tên của bạn sẽ bị xóa khỏi bảng xếp hạng." : "Bỏ ván này? Tiến độ ván hiện tại sẽ mất.")) return;
+    if (room) Online.leave(room.id).catch(() => {});
+    running = false; cardOpen = false; paused = false; S = null;
+    $("card-overlay").classList.add("hidden");
+    $("note-toast").classList.add("hidden");
+    Factory.stop();
+    Music.setMood("normal"); Music.setTension(false); syncMusic();
+    save(); updateStart(); show("screen-start");
+  };
 
   $("btn-join").onclick = () => openJoin();
   $("btn-host").onclick = openHost;

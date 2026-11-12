@@ -61,7 +61,10 @@
       <p class="host-how">Vào <b id="host-url"></b>, chọn <b>Vào phòng bằng mã PIN</b> rồi nhập mã trên.</p>
       <p class="host-count"><b id="host-n">0</b> người chơi · <span id="host-playing">0</span> đang chơi · <span id="host-done">0</span> đã xong</p>
       <div id="host-board"></div>
-      <div class="sub-actions"><button class="ghost" data-home>← Màn hình chính</button></div>
+      <div class="sub-actions">
+        <button class="ghost" data-home>← Màn hình chính</button>
+        <button class="ghost danger" id="btn-close-room">Kết thúc &amp; xóa phòng</button>
+      </div>
     </div>
   </section>
 
@@ -92,6 +95,7 @@
         <button class="tool" data-open="endings">Kết cục <span class="cnt" data-cnt="endings"></span></button>
         <button class="tool" data-toggle="music" title="Bật/tắt nhạc nền (phím M)">Nhạc: Bật</button>
         <button class="tool" data-toggle="sfx" title="Bật/tắt tiếng nhà xưởng và hiệu ứng">Âm thanh: Bật</button>
+        <button class="tool quit" id="btn-quit" title="Bỏ ván này và về màn hình chính">Thoát</button>
       </div>
     </div>
 
