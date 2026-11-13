@@ -19,7 +19,7 @@ const Scene = (() => {
     lastKey = key;
 
     let s = `<defs>
-      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8a67c"/><stop offset="1" stop-color="#e9dcb8"/></linearGradient>
+      <linearGradient id="sky" gradientUnits="userSpaceOnUse" x1="0" y1="-120" x2="0" y2="140"><stop offset="0" stop-color="#b8a67c"/><stop offset="1" stop-color="#e9dcb8"/></linearGradient>
       <pattern id="brick" width="10" height="6" patternUnits="userSpaceOnUse"><rect width="10" height="6" fill="#6b5240"/><path d="M0 0h10M0 3h10M5 0v3M0 3v3" stroke="#4f3b2c" stroke-width=".6" fill="none"/></pattern>
     </defs>
     <style>
@@ -31,11 +31,13 @@ const Scene = (() => {
       .wk{animation:bob .75s ease-in-out infinite}
       .win{animation:flick 2.4s ease-in-out infinite}
     </style>
-    <rect width="400" height="140" fill="url(#sky)"/>
+    <rect x="-1200" y="-1200" width="2800" height="1340" fill="url(#sky)"/>
+    <g fill="#efe3c2" opacity=".5"><ellipse cx="90" cy="-40" rx="38" ry="9"/><ellipse cx="118" cy="-46" rx="24" ry="8"/>
+      <ellipse cx="270" cy="-95" rx="44" ry="10"/><ellipse cx="300" cy="-102" rx="26" ry="8"/><ellipse cx="190" cy="-170" rx="36" ry="9"/></g>
     <circle cx="330" cy="30" r="16" fill="#f3e3b0" opacity=".65"/>
     <path d="M0 96l20-18 18 10 24-26 22 20 26-14 28 22 30-24 26 18 30-20 28 22 30-12 22 14 26-10 20 8v50H0z" fill="#a8977a" opacity=".55"/>
-    <rect y="120" width="400" height="20" fill="#2b2118"/>
-    <rect y="120" width="400" height="2.500" fill="#6f5420"/>`;
+    <rect x="-1200" y="120" width="2800" height="40" fill="#2b2118"/>
+    <rect x="-1200" y="120" width="2800" height="2.500" fill="#6f5420"/>`;
 
     // tòa nhà xưởng (luôn có, rộng khắp khung)
     s += `<rect x="14" y="66" width="372" height="54" fill="url(#brick)"/>
@@ -68,5 +70,16 @@ const Scene = (() => {
     if (workers === 0) s += `<text x="200" y="52" text-anchor="middle" font-size="11" font-family="serif" font-style="italic" fill="#C62828">Xưởng vắng bóng thợ…</text>`;
     svg.innerHTML = s;
   }
-  return { render };
+  // Luôn hiện trọn bề ngang nhà xưởng: viewBox theo đúng tỷ lệ khung, giữ mặt đất ở đáy;
+  // khung cao (máy tính bảng dọc) thì phần dư là bầu trời phía trên thay vì phóng to rồi cắt mất hai bên
+  function fit() {
+    const w = svg.clientWidth, h = svg.clientHeight;
+    if (!w || !h) return;
+    let vw = 400, vh = 400 * h / w;
+    // khung quá dẹt (điện thoại xoay ngang): giữ tối thiểu từ mái tới mặt đất, mở rộng mặt đất/bầu trời sang hai bên
+    if (vh < 80) { vh = 80; vw = 80 * w / h; }
+    svg.setAttribute("viewBox", `${(200 - vw / 2).toFixed(2)} ${(140 - vh).toFixed(2)} ${vw.toFixed(2)} ${vh.toFixed(2)}`);
+  }
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(svg);
+  return { render, fit };
 })();

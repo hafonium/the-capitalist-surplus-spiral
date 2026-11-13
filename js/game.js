@@ -264,9 +264,14 @@
 
   // Thẻ chỉ chiếm phần màn hình phía trên 4 chỉ số, để vẫn thấy chỉ số thay đổi khi kéo thẻ
   function layoutCard() {
-    const top = $("meters").getBoundingClientRect().top, ov = $("card-overlay");
-    const fits = top >= 320 && innerWidth > 640; // điện thoại / màn hình thấp: thẻ phủ toàn màn hình như cũ
-    document.body.classList.toggle("card-above", fits);
+    const body = document.body, ov = $("card-overlay");
+    body.classList.remove("card-pin"); // đo vị trí chỉ số ở chỗ cũ trước khi ghim
+    const top = $("meters").getBoundingClientRect().top;
+    const fits = top >= 320 && innerWidth > 640;
+    body.classList.toggle("card-above", fits);
+    // điện thoại / màn hình thấp: thẻ phủ toàn màn hình, 4 chỉ số được ghim lên đầu màn hình để vẫn thấy số thay đổi
+    body.classList.toggle("card-pin", !fits);
+    ov.style.setProperty("--mh", fits ? "0px" : $("meters").offsetHeight + "px");
     ov.style.setProperty("--avail", fits ? top - 8 + "px" : "100vh");
     ov.style.setProperty("--below", fits ? innerHeight - top + 12 + "px" : "12px");
   }

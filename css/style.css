@@ -10,17 +10,19 @@
 html, body { margin: 0; height: 100%; }
 body {
   background: var(--paper) var(--noise); color: var(--ink);
-  font-family: var(--sans); font-size: 16px; line-height: 1.45;
-  overflow: hidden; user-select: none; -webkit-user-select: none;
+  font-family: var(--sans); font-size: 1rem; line-height: 1.45;
+  overflow-x: hidden; overflow-y: auto; user-select: none; -webkit-user-select: none;
 }
 body::after { /* vết ố ở viền giấy */
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
   box-shadow: inset 0 0 140px rgba(110, 75, 20, .45), inset 0 0 30px rgba(80, 50, 10, .35);
 }
 .ico { width: 1em; height: 1em; display: inline-block; vertical-align: -0.12em; }
-#app { height: 100%; max-width: 1100px; margin: 0 auto; position: relative; }
+#app { min-height: 100%; max-width: 1100px; margin: 0 auto; position: relative; }
 .screen { display: none; height: 100%; padding: 14px 16px; flex-direction: column; }
 .screen.active { display: flex; }
+/* Màn chơi lấp đầy màn hình; nếu nội dung cao hơn (điện thoại xoay ngang, màn thấp) thì trang cuộn được */
+#screen-play.active { height: auto; min-height: 100vh; min-height: 100dvh; }
 .hidden { display: none !important; }
 button { font-family: inherit; cursor: pointer; }
 
@@ -104,7 +106,7 @@ button.big:active { transform: translateY(1px); }
 
 /* ---------- Khung màn chơi (gom mọi thành phần vào một khối) ---------- */
 #frame {
-  position: relative; flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 12px;
+  position: relative; flex: 1 0 auto; display: flex; flex-direction: column; gap: 10px; padding: 12px;
   background: var(--paper2) var(--noise); border: 3px solid var(--brass); border-radius: 10px;
   box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 5px var(--brass-lo), 0 8px 24px rgba(70,45,10,.35);
 }
@@ -156,6 +158,22 @@ body.card-above #lbl-r { grid-area: lb; justify-self: start; width: min(100%, 28
 body.card-above #btn-left { grid-area: ba; justify-self: end; }
 body.card-above #btn-right { grid-area: bb; justify-self: start; }
 body.card-open.card-above #meters { position: relative; z-index: 45; }
+/* Thẻ phủ toàn màn hình (điện thoại, màn thấp): ghim 4 chỉ số thành một dải trên cùng, nổi trên lớp phủ */
+body.card-open.card-pin #meters {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 45; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  max-width: 1100px; margin: 0 auto; padding: 10px 8px 6px; background: linear-gradient(180deg, #1a1918f5, #1a1918d9);
+  border-bottom: 1px solid var(--brass);
+}
+body.card-open.card-pin .meter { padding: 4px 6px 5px; }
+body.card-open.card-pin .meter .num { font-size: 1.05rem; }
+body.card-open.card-pin .meter .bar { height: 7px; margin-top: 3px; }
+body.card-open.card-pin .meter .delta { top: -8px; right: -3px; }
+body.card-open.card-pin #card-overlay { padding-top: calc(var(--mh, 0px) + 8px); }
+@media (max-width: 640px) {
+  body.card-open.card-pin .meter .nm { display: none; } /* chỉ giữ biểu tượng + số cho vừa 4 cột */
+  body.card-open.card-pin .meter .name { justify-content: space-between; }
+  body.card-open.card-pin .meter .badge { width: 20px; height: 20px; font-size: 12px; }
+}
 #card {
   position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; padding: 14px 14px 10px; cursor: grab; will-change: transform;
   background: var(--paper) var(--noise); border-radius: 16px;
@@ -462,3 +480,168 @@ button.big.alt { background: linear-gradient(180deg, #ffd54f, #ff8f00); border-c
 #note-toast.result .chips { margin-top: 0; }
 #note-toast.result .chip { font-size: .85rem; padding: 2px 9px; }
 .nt-new { display: block; margin-top: 8px; font-size: .72rem; color: #bfb394; }
+
+/* ---------- Điện thoại: thu gọn mọi thành phần và cho phép cuộn màn chơi ---------- */
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  #screen-play.active { padding: 6px; }
+  #frame { padding: 6px; gap: 6px; border-width: 2px; }
+  #scene-wrap { flex: none; height: 20vh; min-height: 84px; max-height: 160px; }
+  #pause-banner { font-size: 1.3rem; }
+
+  #timer-row { flex-wrap: nowrap; gap: 8px; padding: 5px 8px; }
+  #timer-row .lbl { flex-basis: auto; font-size: .72rem; letter-spacing: .02em; }
+  #card-timer { height: 22px; min-width: 0; }
+  #card-timer-txt { font-size: .78rem; }
+  #btn-next { padding: 4px 9px; font-size: .78rem; }
+
+  #topbar { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; padding: 6px 8px; }
+  .stat { font-size: .8rem; }
+  .stat .lbl { font-size: .58rem; letter-spacing: .08em; }
+  .stat b { font-size: .95rem; }
+  .big-stat, #st-rate, #st-ex { min-width: 0; }
+  .big-stat #m-val { font-size: 1.25rem; }
+  .m-line .coin { font-size: 1rem; }
+  .m-line .m-unit { font-size: 1rem; }
+  #m-day { min-width: 0; }
+  .stat.goal { grid-column: 1 / -1; max-width: none; }
+  .stat.goal #goal-txt { font-size: .76rem; }
+  #speed { align-self: center; justify-self: end; }
+  #speed button { padding: 4px 8px; min-width: 32px; font-size: .75rem; }
+  .tools { grid-column: 1 / -1; gap: 4px; }
+  .tool { padding: 3px 7px; font-size: .7rem; }
+
+  #meters { gap: 6px; }
+  .meter { padding: 5px 7px 6px; }
+  .meter .name { gap: 5px; font-size: .64rem; }
+  .meter .badge { width: 22px; height: 22px; font-size: 13px; }
+  .meter .num { font-size: 1.05rem; }
+  .meter .bar { height: 8px; margin-top: 4px; }
+  .meter .delta { font-size: .72rem; top: -8px; right: -4px; }
+
+  #shop { gap: 6px; overflow: visible; }
+  .up { grid-template-columns: 28px 1fr; gap: 1px 7px; padding: 6px 7px; }
+  .up .ib { width: 28px; height: 28px; font-size: 15px; grid-row: 1 / span 3; align-self: start; }
+  .up .t { font-size: .8rem; line-height: 1.2; }
+  .up .d { font-size: .68rem; line-height: 1.3; }
+  .up .tags { gap: 3px; margin: 3px 0 0; }
+  .up .price, .up .lvl { font-size: .64rem; padding: 1px 5px; }
+
+  #card-overlay { gap: 10px; padding: 8px; overflow-y: auto; justify-content: flex-start; }
+  #card-area { margin-top: auto; width: min(80vw, 330px, calc((100vh - var(--mh, 0px) - 210px) * 0.75)); flex: none; }
+  #card-buttons { margin-bottom: auto; }
+  #card { padding: 10px 10px 8px; }
+  .who { font-size: .85rem; margin-top: 6px; }
+  .said { font-size: clamp(.74rem, 2vh, .92rem); }
+  .stamp { font-size: .85rem; top: 18px; }
+  #card-choice-labels, .opt { min-width: 0; }
+  .round { width: 40px; height: 40px; font-size: 1.05rem; }
+
+  #note-toast { bottom: 8px; padding: 8px 40px 8px 10px; font-size: .8rem; }
+  #note-toast .rf { font-size: 1rem; }
+  #note-toast.result .chip { font-size: .72rem; }
+  .modal-box { padding: 14px 12px 12px; max-height: 92vh; }
+  #modal-title { font-size: 1.25rem; padding-right: 36px; }
+  #modal { padding: 8px; }
+
+  .start-inner, .end-inner { padding: 16px 0; }
+  .quote { font-size: .92rem; }
+  .how { font-size: .84rem; margin-bottom: 18px; }
+  button.big { padding: 11px 24px; font-size: 1rem; }
+  .crest { width: 56px; height: 56px; }
+  .end-text { font-size: .92rem; line-height: 1.6; }
+}
+
+/* ---------- Máy tính bảng dọc (iPad, Surface…): phóng to giao diện theo bề ngang,
+   để cảnh nhà xưởng không chiếm hết màn hình còn chữ và nút thì quá nhỏ ---------- */
+@media (min-width: 641px) and (orientation: portrait) {
+  /* cỡ chữ theo cả bề ngang lẫn chiều cao, để màn thấp (có thanh trình duyệt) vẫn vừa không phải cuộn */
+  html { font-size: clamp(15px, min(2.25vw, 1.62vh), 23px); }
+  #screen-play.active { padding: 1rem; }
+  #frame { gap: .8rem; padding: .9rem; }
+  #scene-wrap { min-height: 7rem; }
+  #timer-row { padding: .5rem .8rem; }
+  #card-timer { height: 1.8rem; }
+  /* thanh trạng thái gọn 3 hàng: số liệu · mục tiêu + tốc độ · công cụ */
+  #topbar { display: grid; gap: .45rem 1.2rem; padding: .6rem 1rem; align-items: center;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas: "m rate ex cards" "goal goal goal speed" "tools tools tools tools"; }
+  #topbar .big-stat { grid-area: m; } #st-rate { grid-area: rate; } #st-ex { grid-area: ex; }
+  #topbar > .stat:nth-child(5) { grid-area: cards; } #st-goal { grid-area: goal; max-width: none; } #speed { grid-area: speed; }
+  #topbar .tools { grid-area: tools; margin-left: 0; justify-content: flex-end; }
+  .big-stat, #st-rate, #st-ex { min-width: 0; }
+  #m-day { height: .35rem; }
+  #speed button { min-width: 2.6rem; }
+  #meters { gap: .7rem; }
+  .meter .badge { width: 1.8rem; height: 1.8rem; font-size: 1.05rem; }
+  .meter .name { font-size: .74rem; gap: .4rem; }
+  .meter .num { font-size: 1.2rem; }
+  .meter .bar { height: .8rem; }
+  #shop { grid-template-columns: repeat(2, 1fr); gap: .7rem; }
+  .up { grid-template-columns: 2.6rem 1fr; gap: .15rem .7rem; padding: .7rem .8rem; }
+  .up .ib { width: 2.5rem; height: 2.5rem; font-size: 1.4rem; }
+  .round { width: 4rem; height: 4rem; }
+  #card-choice-labels { font-size: .85rem; }
+  .meter .delta { font-size: .8rem; }
+  /* Thẻ lớn hơn; hai phương án nằm dưới thẻ (bên cạnh thẻ thì quá hẹp ở màn dọc) */
+  body.card-above #card-overlay {
+    grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-areas: ". ." "card card" "la lb" "ba bb" ". ."; gap: .8rem 1.2rem;
+  }
+  body.card-above #card-area { justify-self: center; width: min(30rem, 80vw, calc((var(--avail, 100vh) - 15rem) * 0.75)); }
+  body.card-above #lbl-l, body.card-above #lbl-r { width: min(100%, 22rem); font-size: .85rem; }
+  body.card-above .portrait { height: 36%; }
+  body.card-above .said { font-size: .82rem; line-height: 1.4; }
+  body.card-above #btn-left, body.card-above #btn-right { width: 3.4rem; height: 3.4rem; justify-self: center; }
+  .modal-box { width: min(46rem, 100%); }
+  .start-inner, .end-inner { width: min(38rem, 90vw); }
+}
+
+/* ---------- Điện thoại xoay ngang / màn hình thấp: thu gọn để thấy nhiều hơn mà không phải cuộn ---------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  #screen-play.active { padding: 6px; }
+  #frame { padding: 6px; gap: 6px; }
+  #scene-wrap { flex: none; height: 64px; min-height: 0; }
+  #pause-banner { font-size: 1rem; }
+  #pause-banner small { display: none; }
+  #timer-row { padding: 4px 8px; }
+  #timer-row .lbl { font-size: .75rem; }
+  #card-timer { height: 20px; }
+  #btn-next { padding: 3px 10px; font-size: .8rem; }
+  #topbar { gap: 4px 16px; padding: 5px 10px; }
+  .stat { font-size: .8rem; }
+  .stat .lbl { font-size: .58rem; }
+  .big-stat { min-width: 8rem; }
+  .big-stat #m-val { font-size: 1.25rem; }
+  #st-rate { min-width: 6rem; }
+  #st-ex { min-width: 10rem; }
+  .stat.goal #goal-txt { font-size: .74rem; }
+  #speed button { padding: 3px 8px; min-width: 32px; font-size: .75rem; }
+  .tool { padding: 3px 7px; font-size: .7rem; }
+  .meter { padding: 5px 8px 6px; }
+  .meter .name { font-size: .7rem; gap: 5px; }
+  .meter .badge { width: 22px; height: 22px; font-size: 13px; }
+  .meter .num { font-size: 1.05rem; }
+  .meter .bar { height: 8px; margin-top: 4px; }
+  #shop { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .up { grid-template-columns: 26px 1fr; gap: 1px 6px; padding: 6px 7px; }
+  .up .ib { width: 26px; height: 26px; font-size: 14px; grid-row: 1 / span 3; align-self: start; }
+  .up .t { font-size: .78rem; line-height: 1.2; }
+  .up .d { font-size: .66rem; }
+  .up .price, .up .lvl { font-size: .62rem; padding: 1px 5px; }
+  /* Thẻ phủ toàn màn hình: đặt hai phương án hai bên thẻ, vì xếp dưới thẻ thì không đủ chiều cao */
+  body:not(.card-above) #card-overlay {
+    display: grid; grid-template-columns: 1fr auto 1fr; grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas: ". card ." "la card lb" "ba card bb" ". card ."; gap: 10px 20px; align-items: center; padding: 8px 16px;
+  }
+  body:not(.card-above) #card-buttons, body:not(.card-above) #card-choice-labels { display: contents; }
+  body:not(.card-above) #card-area { grid-area: card; width: calc((100vh - var(--mh, 0px) - 16px) * 0.75); width: calc((100dvh - var(--mh, 0px) - 16px) * 0.75); }
+  body:not(.card-above) #lbl-l { grid-area: la; justify-self: end; width: min(100%, 260px); }
+  body:not(.card-above) #lbl-r { grid-area: lb; justify-self: start; width: min(100%, 260px); }
+  body:not(.card-above) #btn-left { grid-area: ba; justify-self: center; }
+  body:not(.card-above) #btn-right { grid-area: bb; justify-self: center; }
+  body:not(.card-above) #card-choice-labels { font-size: .75rem; }
+  #card { padding: 8px 8px 6px; }
+  .who { font-size: .8rem; margin-top: 4px; }
+  .said { font-size: .74rem; }
+}
